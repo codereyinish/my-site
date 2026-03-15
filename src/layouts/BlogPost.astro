@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -8,79 +7,189 @@ import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate } = Astro.props;
+const imgSeed = title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 ---
 
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
 	</head>
-
 	<body>
 		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
+
+		<article class="post-article">
+			<!-- Hero cover -->
+			<div class="post-cover" style={`background-image:url('https://picsum.photos/seed/${imgSeed}/1600/700')`}>
+				<div class="cover-overlay"></div>
+				<div class="container">
+					<div class="cover-content animate-fadeInDown">
+						<a href="/blog" class="back-crumb mono">
+							← Writing
+						</a>
+						<h1 class="post-title">{title}</h1>
+						{description && <p class="post-desc">{description}</p>}
+						<div class="post-meta mono">
+							<span><FormattedDate date={pubDate} /></span>
+							{updatedDate && (
+								<span class="updated-note">Updated: <FormattedDate date={updatedDate} /></span>
+							)}
 						</div>
-						<h1>{title}</h1>
-						<hr />
 					</div>
-					<slot />
 				</div>
-			</article>
-		</main>
+			</div>
+
+			<!-- Prose -->
+			<div class="container">
+				<div class="prose-wrap animate-fadeInUp">
+					<div class="prose">
+						<slot />
+					</div>
+					<div class="post-footer">
+						<div class="post-footer-line"></div>
+						<div class="post-footer-nav">
+							<a href="/blog" class="back-link">
+								<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+								Back to all posts
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
+
 		<Footer />
 	</body>
 </html>
+
+<style>
+	/* Cover */
+	.post-cover {
+		position: relative;
+		min-height: 480px;
+		display: flex;
+		align-items: flex-end;
+		background-size: cover;
+		background-position: center;
+		background-color: var(--surface);
+		padding-top: 80px;
+	}
+	.cover-overlay {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.88) 100%);
+	}
+	.cover-content {
+		position: relative;
+		z-index: 2;
+		padding: 60px 0 56px;
+		max-width: 760px;
+	}
+	.back-crumb {
+		display: inline-block;
+		font-size: 11px;
+		letter-spacing: 1.5px;
+		text-transform: uppercase;
+		color: rgba(255,255,255,0.45);
+		margin-bottom: 24px;
+		transition: color 0.2s;
+	}
+	.back-crumb:hover { color: rgba(255,255,255,0.7); }
+	.post-title {
+		font-size: clamp(2rem, 5vw, 3.5rem);
+		font-weight: 800;
+		letter-spacing: -1.5px;
+		line-height: 1.1;
+		color: #fff;
+		margin-bottom: 16px;
+	}
+	.post-desc {
+		font-size: 1.1rem;
+		color: rgba(255,255,255,0.6);
+		max-width: 560px;
+		line-height: 1.65;
+		margin-bottom: 20px;
+	}
+	.post-meta {
+		display: flex;
+		gap: 20px;
+		font-size: 11px;
+		letter-spacing: 1px;
+		color: rgba(255,255,255,0.4);
+		text-transform: uppercase;
+	}
+	.updated-note { color: rgba(255,255,255,0.3); }
+
+	/* Prose */
+	.prose-wrap {
+		max-width: 720px;
+		padding: 64px 0 48px;
+	}
+	.prose {
+		font-size: 1.08rem;
+		line-height: 1.85;
+		color: rgba(255,255,255,0.82);
+	}
+	.prose :global(h2) {
+		font-family: var(--font-sans);
+		font-size: 1.65rem;
+		font-weight: 700;
+		letter-spacing: -0.5px;
+		color: var(--text);
+		margin: 2.5rem 0 0.75rem;
+	}
+	.prose :global(h3) {
+		font-family: var(--font-sans);
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: var(--text);
+		margin: 2rem 0 0.5rem;
+	}
+	.prose :global(p) { margin-bottom: 1.65em; }
+	.prose :global(a) {
+		color: var(--blue);
+		border-bottom: 1px solid rgba(59,130,246,0.3);
+		transition: border-color 0.2s;
+	}
+	.prose :global(a:hover) { border-color: var(--blue); opacity: 0.85; }
+	.prose :global(ul), .prose :global(ol) { padding-left: 1.5rem; margin-bottom: 1.5em; }
+	.prose :global(li) { margin-bottom: 0.4em; }
+	.prose :global(blockquote) {
+		border-left: 2px solid var(--blue);
+		padding: 1rem 0 1rem 1.5rem;
+		margin: 2rem 0;
+		color: var(--text-secondary);
+		font-style: italic;
+		font-size: 1.05em;
+		background: var(--surface);
+		border-radius: 0 8px 8px 0;
+	}
+	.prose :global(img) {
+		width: 100%;
+		border-radius: 12px;
+		margin: 1.5rem 0;
+		border: 1px solid var(--border);
+	}
+	.prose :global(hr) { margin: 3rem 0; border-color: var(--border); }
+
+	/* Footer nav */
+	.post-footer { margin-top: 3rem; }
+	.post-footer-line { border-top: 1px solid var(--border); margin-bottom: 24px; }
+	.post-footer-nav { display: flex; justify-content: space-between; align-items: center; }
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 14px;
+		font-weight: 500;
+		color: var(--text-secondary);
+		transition: color 0.2s;
+	}
+	.back-link:hover { color: var(--text); }
+
+	@media (max-width: 720px) {
+		.post-cover { min-height: 360px; }
+		.cover-content { padding: 40px 0 40px; }
+		.prose-wrap { padding: 40px 0 32px; }
+	}
+</style>

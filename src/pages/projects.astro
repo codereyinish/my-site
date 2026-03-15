@@ -1,0 +1,212 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title="Projects — Inish Bista" description="Things I've built." />
+	</head>
+	<body>
+		<Header />
+		<main class="page-main">
+			<div class="container">
+				<div class="page-header animate-fadeInDown">
+					<p class="eyebrow mono">Case Studies</p>
+					<h1>Selected <span class="serif">Work</span></h1>
+					<p class="page-sub">Projects built with a focus on AI, developer tools, and real-world utility.</p>
+				</div>
+
+				<div class="section-divider"></div>
+
+				<!-- 01 ClassRec -->
+				<article class="project-row animate-fadeInUp delay-1" id="classrec">
+					<div class="project-left">
+						<div class="project-num-row">
+							<span class="project-num mono">01</span>
+							<span class="badge">Active</span>
+						</div>
+						<h2 class="project-title">ClassRec</h2>
+						<p class="project-desc">
+							A live lecture transcription SaaS that captures, transcribes, and organizes
+							classroom audio in real time. Students focus on understanding instead of frantic
+							note-taking. Built around OpenAI Whisper with a FastAPI backend and React frontend.
+						</p>
+						<p class="project-desc">
+							Supports real-time streaming via WebSockets, speaker diarization, and
+							auto-formatted notes export. Designed with students as the primary user.
+						</p>
+						<div class="project-tech-row">
+							<span class="tech-tag">Python</span>
+							<span class="tech-tag">FastAPI</span>
+							<span class="tech-tag">OpenAI Whisper</span>
+							<span class="tech-tag">React</span>
+							<span class="tech-tag">WebSockets</span>
+							<span class="tech-tag">PostgreSQL</span>
+						</div>
+						<div class="project-links">
+							<span class="project-wip mono">GitHub · Demo — coming soon</span>
+						</div>
+					</div>
+					<div class="project-right">
+						<div class="project-cover">
+							<img src="https://picsum.photos/seed/classrec-project-v2/700/500" alt="ClassRec" loading="lazy" />
+						</div>
+						<div class="project-meta-box">
+							<div class="meta-row">
+								<span class="meta-label mono">Timeline</span>
+								<span class="meta-val">Q4 2024 — Present</span>
+							</div>
+							<div class="meta-row">
+								<span class="meta-label mono">Type</span>
+								<span class="meta-val">SaaS · AI Tool</span>
+							</div>
+							<div class="meta-row">
+								<span class="meta-label mono">Status</span>
+								<span class="meta-val" style="color:var(--cyan)">Active development</span>
+							</div>
+						</div>
+					</div>
+				</article>
+
+				<div class="section-divider"></div>
+
+				<!-- 02 MBGPT -->
+				<article class="project-row animate-fadeInUp delay-2" id="mbgpt">
+					<div class="project-left">
+						<div class="project-num-row">
+							<span class="project-num mono">02</span>
+							<span class="badge">Shipped</span>
+						</div>
+						<h2 class="project-title">MBGPT</h2>
+						<p class="project-desc">
+							An AI YouTube comment assistant that replies in the creator's own voice.
+							Context-aware, human-toned, never generic. Demonstrates the evolution from
+							baseline GPT to RAG-grounded to fine-tuned response quality.
+						</p>
+						<p class="project-desc">
+							Uses retrieval-augmented generation with video transcript context and
+							fine-tuning on historical comment–reply pairs. Built as an end-to-end
+							ML project from data collection to deployment demo.
+						</p>
+						<div class="project-tech-row">
+							<span class="tech-tag">Python</span>
+							<span class="tech-tag">OpenAI API</span>
+							<span class="tech-tag">RAG</span>
+							<span class="tech-tag">Fine-tuning</span>
+							<span class="tech-tag">Jupyter</span>
+							<span class="tech-tag">Vector DB</span>
+						</div>
+						<div class="project-links">
+							<a href="https://github.com/codereyinish/MBGPT" target="_blank" rel="noopener" class="project-link">
+								View on GitHub
+								<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+							</a>
+						</div>
+					</div>
+					<div class="project-right">
+						<div class="project-cover">
+							<img src="https://picsum.photos/seed/mbgpt-project-v2/700/500" alt="MBGPT" loading="lazy" />
+						</div>
+						<div class="project-meta-box">
+							<div class="meta-row">
+								<span class="meta-label mono">Timeline</span>
+								<span class="meta-val">Q3 2024</span>
+							</div>
+							<div class="meta-row">
+								<span class="meta-label mono">Type</span>
+								<span class="meta-val">ML · NLP</span>
+							</div>
+							<div class="meta-row">
+								<span class="meta-label mono">Status</span>
+								<span class="meta-val" style="color:var(--indigo)">Shipped</span>
+							</div>
+						</div>
+					</div>
+				</article>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.page-main { padding-top: 100px; position: relative; z-index: 10; }
+	.page-header { padding: 40px 0 48px; }
+	.eyebrow { font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+	h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 16px; }
+	.page-sub { color: var(--text-secondary); font-size: 1rem; max-width: 500px; margin: 0; }
+	.section-divider { margin: 0 0 64px; }
+	.project-row {
+		display: grid;
+		grid-template-columns: 1fr 480px;
+		gap: 60px;
+		align-items: start;
+		padding-bottom: 64px;
+	}
+	.project-num-row {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 16px;
+	}
+	.project-num { font-size: 13px; letter-spacing: 1px; color: var(--text-muted); }
+	.project-title { font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 20px; }
+	.project-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.75; max-width: 520px; margin-bottom: 16px; }
+	.project-tech-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+	.tech-tag {
+		font-family: var(--font-mono);
+		font-size: 11px;
+		padding: 4px 12px;
+		border: 1px solid var(--border);
+		border-radius: 4px;
+		color: var(--text-muted);
+	}
+	.project-links { display: flex; gap: 16px; }
+	.project-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 14px;
+		font-weight: 500;
+		color: var(--text-secondary);
+		border-bottom: 1px solid var(--border);
+		padding-bottom: 2px;
+		transition: color 0.2s, border-color 0.2s;
+	}
+	.project-link:hover { color: var(--text); border-color: var(--text-secondary); }
+	.project-wip { font-size: 12px; color: var(--text-muted); }
+	.project-cover {
+		border-radius: 16px;
+		overflow: hidden;
+		border: 1px solid var(--border);
+		margin-bottom: 16px;
+	}
+	.project-cover img { width: 100%; display: block; transition: transform 0.4s ease; }
+	.project-row:hover .project-cover img { transform: scale(1.02); }
+	.project-meta-box {
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		overflow: hidden;
+		background: var(--surface);
+	}
+	.meta-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 12px 16px;
+		border-bottom: 1px solid var(--border);
+	}
+	.meta-row:last-child { border-bottom: none; }
+	.meta-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+	.meta-val { font-size: 13px; color: var(--text-secondary); }
+	@media (max-width: 1024px) {
+		.project-row { grid-template-columns: 1fr; gap: 40px; }
+		.project-right { max-width: 560px; }
+	}
+	@media (max-width: 580px) {
+		.page-main { padding-top: 80px; }
+	}
+</style>

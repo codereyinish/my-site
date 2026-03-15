@@ -1,0 +1,224 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title="Resume — Inish Bista" description="Inish Bista's resume." />
+	</head>
+	<body>
+		<Header />
+		<main class="page-main">
+			<div class="container">
+				<div class="page-header animate-fadeInDown">
+					<p class="eyebrow mono">CV</p>
+					<h1>Résumé</h1>
+					<p class="page-sub">CS student, graduating May 2025. Open to full-time roles.</p>
+					<a href="mailto:inishbista@gmail.com" class="btn btn-primary" style="margin-top:24px;display:inline-flex">
+						Request resume PDF
+						<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+					</a>
+				</div>
+
+				<div class="section-divider"></div>
+
+				<div class="resume-grid animate-fadeInUp delay-1">
+					<div class="resume-main">
+
+						<section class="resume-section">
+							<h2 class="section-title mono">Experience</h2>
+							<div class="resume-items">
+								<div class="resume-item">
+									<div class="item-header">
+										<div>
+											<h3 class="item-role">Software Engineering Intern</h3>
+											<p class="item-org">Add your experience here</p>
+										</div>
+										<span class="item-date mono">2024</span>
+									</div>
+									<ul class="item-bullets">
+										<li>Details about your role and impact</li>
+									</ul>
+								</div>
+							</div>
+						</section>
+
+						<section class="resume-section">
+							<h2 class="section-title mono">Education</h2>
+							<div class="resume-items">
+								<div class="resume-item">
+									<div class="item-header">
+										<div>
+											<h3 class="item-role">B.S. Computer Science</h3>
+											<p class="item-org">St. Joseph's College New York</p>
+										</div>
+										<span class="item-date mono">2021 – 2025</span>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<section class="resume-section">
+							<h2 class="section-title mono">Projects</h2>
+							<div class="resume-items">
+								<div class="resume-item">
+									<div class="item-header">
+										<div>
+											<h3 class="item-role">ClassRec</h3>
+											<p class="item-org">Live lecture transcription SaaS</p>
+										</div>
+										<span class="item-date mono">2024</span>
+									</div>
+									<ul class="item-bullets">
+										<li>Built real-time transcription pipeline with OpenAI Whisper and WebSockets</li>
+										<li>FastAPI backend, React frontend, PostgreSQL for session storage</li>
+									</ul>
+								</div>
+								<div class="resume-item">
+									<div class="item-header">
+										<div>
+											<h3 class="item-role">MBGPT</h3>
+											<p class="item-org">AI YouTube comment assistant</p>
+										</div>
+										<span class="item-date mono">2024</span>
+									</div>
+									<ul class="item-bullets">
+										<li>RAG pipeline with OpenAI API for context-aware comment replies</li>
+										<li>Fine-tuned GPT model on historical comment–reply pairs</li>
+									</ul>
+								</div>
+							</div>
+						</section>
+
+					</div>
+
+					<aside class="resume-sidebar">
+						<div class="sidebar-card">
+							<h3 class="card-title mono">Skills</h3>
+							<div class="skills-group">
+								<p class="skill-label">Languages</p>
+								<div class="skill-tags">
+									<span>Python</span><span>TypeScript</span><span>SQL</span><span>JavaScript</span>
+								</div>
+							</div>
+							<div class="skills-group">
+								<p class="skill-label">Frameworks</p>
+								<div class="skill-tags">
+									<span>FastAPI</span><span>React</span><span>Next.js</span>
+								</div>
+							</div>
+							<div class="skills-group">
+								<p class="skill-label">AI / ML</p>
+								<div class="skill-tags">
+									<span>OpenAI API</span><span>Whisper</span><span>RAG</span><span>Fine-tuning</span>
+								</div>
+							</div>
+							<div class="skills-group">
+								<p class="skill-label">Tools</p>
+								<div class="skill-tags">
+									<span>Git</span><span>Docker</span><span>Vercel</span><span>PostgreSQL</span>
+								</div>
+							</div>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.page-main { padding-top: 100px; position: relative; z-index: 10; }
+	.page-header { padding: 40px 0 48px; }
+	.eyebrow { font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+	h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 12px; }
+	.page-sub { color: var(--text-secondary); font-size: 1rem; margin: 0; }
+	.section-divider { margin-bottom: 48px; }
+
+	.resume-grid {
+		display: grid;
+		grid-template-columns: 1fr 280px;
+		gap: 48px;
+		align-items: start;
+		padding-bottom: 80px;
+	}
+	.resume-section { margin-bottom: 48px; }
+	.section-title {
+		font-size: 10px;
+		letter-spacing: 2.5px;
+		text-transform: uppercase;
+		color: var(--text-muted);
+		font-weight: 400;
+		margin-bottom: 20px;
+		padding-bottom: 12px;
+		border-bottom: 1px solid var(--border);
+	}
+	.resume-items { display: flex; flex-direction: column; gap: 32px; }
+	.resume-item {}
+	.item-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 16px;
+		margin-bottom: 10px;
+	}
+	.item-role { font-size: 1.05rem; font-weight: 600; letter-spacing: -0.2px; margin-bottom: 3px; }
+	.item-org { font-size: 13px; color: var(--text-secondary); margin: 0; }
+	.item-date { font-size: 11px; letter-spacing: 0.5px; color: var(--text-muted); white-space: nowrap; padding-top: 3px; }
+	.item-bullets { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+	.item-bullets li {
+		font-size: 14px;
+		color: var(--text-secondary);
+		line-height: 1.65;
+		padding-left: 16px;
+		position: relative;
+	}
+	.item-bullets li::before {
+		content: '—';
+		position: absolute;
+		left: 0;
+		color: var(--text-muted);
+		font-family: var(--font-mono);
+		font-size: 12px;
+	}
+
+	/* Sidebar */
+	.sidebar-card {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 14px;
+		padding: 20px;
+		position: sticky;
+		top: 80px;
+	}
+	.card-title {
+		font-size: 10px;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+		color: var(--text-muted);
+		font-weight: 400;
+		margin-bottom: 20px;
+	}
+	.skills-group { margin-bottom: 18px; }
+	.skills-group:last-child { margin-bottom: 0; }
+	.skill-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+	.skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+	.skill-tags span {
+		font-family: var(--font-mono);
+		font-size: 11px;
+		padding: 3px 10px;
+		border: 1px solid var(--border);
+		border-radius: 4px;
+		color: var(--text-muted);
+	}
+
+	@media (max-width: 768px) {
+		.resume-grid { grid-template-columns: 1fr; }
+		.sidebar-card { position: static; }
+	}
+	@media (max-width: 580px) { .page-main { padding-top: 80px; } }
+</style>

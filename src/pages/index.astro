@@ -1,8 +1,27 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
+
+const techs = [
+	{ name: 'Python',      color: '#3b82f6' },
+	{ name: 'FastAPI',     color: '#06b6d4' },
+	{ name: 'React',       color: '#61dafb' },
+	{ name: 'TypeScript',  color: '#3178c6' },
+	{ name: 'OpenAI API',  color: '#10a37f' },
+	{ name: 'Whisper',     color: '#8b5cf6' },
+	{ name: 'SQL',         color: '#f59e0b' },
+	{ name: 'Git',         color: '#f05033' },
+	{ name: 'Docker',      color: '#2496ed' },
+	{ name: 'Next.js',     color: '#ffffff' },
+];
 ---
 
 <!doctype html>
@@ -12,38 +31,711 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	</head>
 	<body>
 		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
+
+		<!-- ═══════════════════════════════════════════
+		     HERO
+		════════════════════════════════════════════ -->
+		<section class="hero">
+			<!-- Blurred glow orbs -->
+			<div class="glow glow-1"></div>
+			<div class="glow glow-2"></div>
+
+			<div class="container">
+				<div class="hero-inner">
+					<div class="hero-left animate-fadeInDown">
+						<div class="hero-badge">
+							<span class="badge-dot"></span>
+							<span class="mono" style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-secondary)">Available for work</span>
+						</div>
+
+						<h1 class="hero-heading">
+							Hi, I'm<br/>
+							<span class="serif hero-name">Inish Bista</span>
+						</h1>
+
+						<p class="hero-sub">
+							CS student at St. Joseph's College NY, graduating May 2025.
+							I build AI-powered tools and write about software, ideas, and learning.
+							Originally from <span style="color:var(--text)">Nepal 🇳🇵</span>, based in New York.
+						</p>
+
+						<div class="hero-actions">
+							<a href="/projects" class="btn btn-primary">
+								View Projects
+								<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+							</a>
+							<a href="/blog" class="btn btn-outline">Read the blog</a>
+							<a href="https://github.com/codereyinish" target="_blank" rel="noopener" class="btn btn-outline">
+								GitHub
+								<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+							</a>
+						</div>
+
+						<div class="hero-stats">
+							<div class="stat">
+								<span class="stat-num">2+</span>
+								<span class="stat-label">Projects shipped</span>
+							</div>
+							<div class="stat-divider"></div>
+							<div class="stat">
+								<span class="stat-num">2025</span>
+								<span class="stat-label">Graduating</span>
+							</div>
+							<div class="stat-divider"></div>
+							<div class="stat">
+								<span class="stat-num">NY</span>
+								<span class="stat-label">Based in</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="hero-right animate-fadeInDown delay-2">
+						<div class="hero-img-wrap">
+							<div class="hero-img" style="background-image:url('https://picsum.photos/seed/inish-hero-portrait/500/600')"></div>
+							<div class="hero-img-ring"></div>
+							<!-- Floating labels -->
+							<div class="float-label float-label-1">
+								<span class="mono" style="font-size:10px;color:var(--text-secondary)">CS Student</span>
+							</div>
+							<div class="float-label float-label-2">
+								<span class="badge badge-blue">Open to work</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ═══════════════════════════════════════════
+		     TECH STRIP
+		════════════════════════════════════════════ -->
+		<section class="tech-strip">
+			<div class="stripe-row-top"></div>
+			<div class="container">
+				<div class="tech-inner">
+					<span class="tech-label mono">Tech I work with</span>
+					<div class="tech-list">
+						{techs.map(t => (
+							<span class="tech-item">
+								<span class="tech-dot" style={`background:${t.color}`}></span>
+								{t.name}
+							</span>
+						))}
+					</div>
+				</div>
+			</div>
+			<div class="stripe-row-bottom"></div>
+		</section>
+
+		<!-- ═══════════════════════════════════════════
+		     PROJECTS (Case Studies)
+		════════════════════════════════════════════ -->
+		<section class="projects-section">
+			<div class="container">
+				<div class="section-header">
+					<div>
+						<p class="section-eyebrow mono">Case Studies</p>
+						<h2>Selected <span class="serif">Work</span></h2>
+					</div>
+					<a href="/projects" class="section-link">
+						All projects
+						<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+					</a>
+				</div>
+
+				<div class="projects-list">
+
+					<!-- Project 01 — ClassRec -->
+					<article class="project-row">
+						<div class="project-num mono">01</div>
+						<div class="project-content">
+							<div class="project-meta">
+								<span class="project-year mono">Q4 2024</span>
+								<span class="badge">Active</span>
+							</div>
+							<h3 class="project-title">ClassRec</h3>
+							<p class="project-desc">
+								A live lecture transcription SaaS — captures, transcribes, and organizes
+								classroom audio in real time so students can focus on learning instead of
+								frantic note-taking. Built with OpenAI Whisper and FastAPI.
+							</p>
+							<div class="project-tech-row">
+								<span class="tech-tag">Python</span>
+								<span class="tech-tag">FastAPI</span>
+								<span class="tech-tag">OpenAI Whisper</span>
+								<span class="tech-tag">React</span>
+								<span class="tech-tag">WebSockets</span>
+							</div>
+						</div>
+						<div class="project-cover">
+							<img
+								src="https://picsum.photos/seed/classrec-cover/600/400"
+								alt="ClassRec"
+								loading="lazy"
+							/>
+						</div>
+					</article>
+
+					<div class="section-divider"></div>
+
+					<!-- Project 02 — MBGPT -->
+					<article class="project-row">
+						<div class="project-num mono">02</div>
+						<div class="project-content">
+							<div class="project-meta">
+								<span class="project-year mono">Q3 2024</span>
+								<span class="badge">Shipped</span>
+							</div>
+							<h3 class="project-title">MBGPT</h3>
+							<p class="project-desc">
+								An AI YouTube comment assistant that replies in a creator's own voice —
+								context-aware, human-toned, never generic. Compares three model generations:
+								baseline GPT, RAG-grounded, and fine-tuned on real comment history.
+							</p>
+							<div class="project-tech-row">
+								<span class="tech-tag">Python</span>
+								<span class="tech-tag">OpenAI API</span>
+								<span class="tech-tag">RAG</span>
+								<span class="tech-tag">Fine-tuning</span>
+								<span class="tech-tag">Jupyter</span>
+							</div>
+							<div class="project-links">
+								<a href="https://github.com/codereyinish/MBGPT" target="_blank" rel="noopener" class="project-link">
+									GitHub
+									<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+								</a>
+							</div>
+						</div>
+						<div class="project-cover">
+							<img
+								src="https://picsum.photos/seed/mbgpt-ai-cover/600/400"
+								alt="MBGPT"
+								loading="lazy"
+							/>
+						</div>
+					</article>
+
+				</div>
+			</div>
+		</section>
+
+		<!-- ═══════════════════════════════════════════
+		     BLOG
+		════════════════════════════════════════════ -->
+		{posts.length > 0 && (
+			<section class="blog-section">
+				<div class="stripe-row-top"></div>
+				<div class="container">
+					<div class="section-header">
+						<div>
+							<p class="section-eyebrow mono">Writing</p>
+							<h2>Recent <span class="serif">Articles</span></h2>
+						</div>
+						<a href="/blog" class="section-link">
+							All posts
+							<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+						</a>
+					</div>
+
+					<div class="blog-grid">
+						{posts.map((post, i) => (
+							<a href={`/blog/${post.id}/`} class={`blog-card ${i === 0 ? 'blog-card-featured' : ''}`}>
+								<div class="blog-card-img" style={`background-image:url('https://picsum.photos/seed/${post.id}-blog/800/500')`}>
+									<div class="blog-card-overlay"></div>
+								</div>
+								<div class="blog-card-body">
+									<span class="blog-card-date mono">
+										<FormattedDate date={post.data.pubDate} />
+									</span>
+									<h3 class="blog-card-title">{post.data.title}</h3>
+									{post.data.description && (
+										<p class="blog-card-desc">{post.data.description}</p>
+									)}
+									<span class="blog-card-cta">
+										Read article
+										<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+									</span>
+								</div>
+							</a>
+						))}
+					</div>
+				</div>
+				<div class="stripe-row-bottom"></div>
+			</section>
+		)}
+
+		<!-- ═══════════════════════════════════════════
+		     CONTACT CTA
+		════════════════════════════════════════════ -->
+		<section class="contact-section">
+			<div class="container">
+				<div class="contact-inner">
+					<div class="contact-glow"></div>
+					<p class="section-eyebrow mono">Contact</p>
+					<h2 class="contact-heading">
+						Let's <span class="serif" style="font-style:italic">work together</span><span style="color:var(--blue)">.</span>
+					</h2>
+					<p class="contact-sub">
+						Open to internships, full-time roles, and interesting side projects.
+						Whether you want to collaborate or just say hi — my inbox is open.
+					</p>
+					<div class="contact-actions">
+						<a href="mailto:inishbista@gmail.com" class="btn btn-primary" style="font-size:15px;padding:12px 28px">
+							Send me an email
+							<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+						</a>
+						<a href="https://linkedin.com/in/inishbista" target="_blank" rel="noopener" class="btn btn-outline" style="font-size:15px;padding:12px 28px">
+							LinkedIn
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
 		<Footer />
 	</body>
 </html>
+
+<style>
+/* ── Hero ──────────────────────────────────────── */
+.hero {
+	position: relative;
+	min-height: 100svh;
+	display: flex;
+	align-items: center;
+	padding-top: 80px;
+	overflow: hidden;
+}
+.glow {
+	position: absolute;
+	border-radius: 50%;
+	filter: blur(120px);
+	pointer-events: none;
+}
+.glow-1 {
+	width: 600px; height: 600px;
+	background: rgba(59,130,246,0.12);
+	top: -100px; left: -200px;
+	animation: glow 6s ease-in-out infinite;
+}
+.glow-2 {
+	width: 400px; height: 400px;
+	background: rgba(99,102,241,0.1);
+	bottom: 0; right: -100px;
+	animation: glow 8s ease-in-out infinite reverse;
+}
+.hero-inner {
+	display: grid;
+	grid-template-columns: 1fr 400px;
+	gap: 80px;
+	align-items: center;
+	padding: 80px 0;
+}
+.hero-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 14px;
+	border-radius: 100px;
+	border: 1px solid var(--border);
+	background: rgba(255,255,255,0.04);
+	margin-bottom: 28px;
+}
+.badge-dot {
+	width: 7px; height: 7px;
+	border-radius: 50%;
+	background: var(--cyan);
+	box-shadow: 0 0 8px rgba(6,182,212,0.6);
+}
+.hero-heading {
+	font-size: clamp(3rem, 7vw, 5.5rem);
+	font-weight: 800;
+	letter-spacing: -2.5px;
+	line-height: 1;
+	margin-bottom: 24px;
+	color: var(--text);
+}
+.hero-name {
+	display: block;
+	font-size: 1.05em;
+	background: linear-gradient(135deg, #fff 20%, #737373 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	font-weight: 400;
+	letter-spacing: -2px;
+}
+.hero-sub {
+	font-size: 1.05rem;
+	color: var(--text-secondary);
+	line-height: 1.75;
+	max-width: 520px;
+	margin-bottom: 36px;
+}
+.hero-actions {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin-bottom: 48px;
+}
+.hero-stats {
+	display: flex;
+	align-items: center;
+	gap: 24px;
+}
+.stat { display: flex; flex-direction: column; gap: 2px; }
+.stat-num {
+	font-family: var(--font-sans);
+	font-size: 1.4rem;
+	font-weight: 700;
+	color: var(--text);
+	line-height: 1;
+}
+.stat-label {
+	font-family: var(--font-mono);
+	font-size: 10px;
+	color: var(--text-muted);
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+}
+.stat-divider {
+	width: 1px;
+	height: 36px;
+	background: var(--border);
+}
+/* Hero image */
+.hero-img-wrap {
+	position: relative;
+	width: 100%;
+}
+.hero-img {
+	width: 100%;
+	aspect-ratio: 5/6;
+	border-radius: 20px;
+	background-size: cover;
+	background-position: center;
+	background-color: var(--surface);
+	border: 1px solid var(--border);
+}
+.hero-img-ring {
+	position: absolute;
+	inset: -10px;
+	border-radius: 28px;
+	border: 1px solid var(--border);
+	pointer-events: none;
+}
+.float-label {
+	position: absolute;
+	background: rgba(0,0,0,0.8);
+	border: 1px solid var(--border);
+	border-radius: 100px;
+	padding: 6px 14px;
+	backdrop-filter: blur(12px);
+	white-space: nowrap;
+}
+.float-label-1 { bottom: -16px; left: -20px; }
+.float-label-2 { top: 24px; right: -24px; }
+
+/* ── Tech strip ────────────────────────────────── */
+.tech-strip { padding: 0; margin: 80px 0; }
+.stripe-row-top, .stripe-row-bottom {
+	height: 1px;
+	background-image: var(--stripe-pattern);
+	background-size: 8px 8px;
+	opacity: 0.6;
+	border-top: 1px solid var(--border);
+}
+.stripe-row-bottom { border-top: none; border-bottom: 1px solid var(--border); }
+.tech-inner {
+	display: flex;
+	align-items: center;
+	gap: 32px;
+	padding: 20px 0;
+	flex-wrap: wrap;
+}
+.tech-label {
+	font-size: 11px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: var(--text-muted);
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+.tech-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+.tech-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	padding: 5px 14px;
+	border: 1px solid var(--border);
+	border-radius: 100px;
+	font-size: 13px;
+	color: var(--text-secondary);
+	transition: border-color 0.2s, color 0.2s;
+}
+.tech-item:hover { border-color: var(--border-light); color: var(--text); }
+.tech-dot {
+	width: 6px; height: 6px;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+
+/* ── Projects ──────────────────────────────────── */
+.projects-section { padding: 80px 0; }
+.section-header {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	margin-bottom: 48px;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+.section-eyebrow {
+	font-size: 11px;
+	letter-spacing: 2.5px;
+	text-transform: uppercase;
+	color: var(--text-muted);
+	margin-bottom: 8px;
+}
+.section-header h2 { margin: 0; }
+.section-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--text-secondary);
+	border-bottom: 1px solid var(--border);
+	padding-bottom: 2px;
+	transition: color 0.2s, border-color 0.2s;
+}
+.section-link:hover { color: var(--text); border-color: var(--text-secondary); }
+
+.projects-list { display: flex; flex-direction: column; }
+.project-row {
+	display: grid;
+	grid-template-columns: 56px 1fr 380px;
+	gap: 40px;
+	align-items: start;
+	padding: 48px 0;
+}
+.project-num {
+	font-size: 13px;
+	letter-spacing: 1px;
+	color: var(--text-muted);
+	padding-top: 4px;
+}
+.project-meta {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 14px;
+}
+.project-year {
+	font-size: 11px;
+	letter-spacing: 1px;
+	color: var(--text-muted);
+}
+.project-title {
+	font-size: 1.75rem;
+	font-weight: 700;
+	letter-spacing: -0.5px;
+	margin-bottom: 14px;
+}
+.project-desc {
+	font-size: 15px;
+	color: var(--text-secondary);
+	line-height: 1.7;
+	max-width: 500px;
+	margin-bottom: 20px;
+}
+.project-tech-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 20px;
+}
+.tech-tag {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	padding: 3px 10px;
+	border: 1px solid var(--border);
+	border-radius: 4px;
+	color: var(--text-muted);
+}
+.project-links { display: flex; gap: 12px; }
+.project-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--text-secondary);
+	border-bottom: 1px solid var(--border);
+	padding-bottom: 1px;
+	transition: color 0.2s, border-color 0.2s;
+}
+.project-link:hover { color: var(--text); border-color: var(--text-secondary); }
+.project-cover {
+	border-radius: 14px;
+	overflow: hidden;
+	border: 1px solid var(--border);
+	aspect-ratio: 3/2;
+}
+.project-cover img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 0;
+	display: block;
+	transition: transform 0.4s ease;
+}
+.project-row:hover .project-cover img { transform: scale(1.03); }
+
+/* ── Blog ──────────────────────────────────────── */
+.blog-section { padding: 0; }
+.blog-section .container { padding-top: 64px; padding-bottom: 64px; }
+.blog-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+}
+.blog-card {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid var(--border);
+	border-radius: 14px;
+	overflow: hidden;
+	text-decoration: none;
+	background: var(--surface);
+	transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.blog-card:hover {
+	border-color: var(--border-light);
+	transform: translateY(-3px);
+}
+.blog-card-featured {
+	grid-column: span 2;
+}
+.blog-card-img {
+	position: relative;
+	padding-top: 58%;
+	background-size: cover;
+	background-position: center;
+	background-color: var(--surface2);
+}
+.blog-card-featured .blog-card-img { padding-top: 50%; }
+.blog-card-overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.5) 100%);
+}
+.blog-card-body {
+	padding: 18px 18px 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	flex: 1;
+}
+.blog-card-date {
+	font-size: 11px;
+	letter-spacing: 1px;
+	color: var(--text-muted);
+	text-transform: uppercase;
+}
+.blog-card-title {
+	font-size: 1.05rem;
+	font-weight: 600;
+	letter-spacing: -0.2px;
+	line-height: 1.35;
+	color: var(--text);
+	margin: 0;
+}
+.blog-card-featured .blog-card-title { font-size: 1.3rem; }
+.blog-card-desc {
+	font-size: 13px;
+	color: var(--text-secondary);
+	line-height: 1.55;
+	margin: 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+.blog-card-cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	margin-top: auto;
+	padding-top: 10px;
+	font-size: 12px;
+	font-weight: 500;
+	color: var(--text-muted);
+	transition: color 0.2s;
+}
+.blog-card:hover .blog-card-cta { color: var(--blue); }
+
+/* ── Contact ───────────────────────────────────── */
+.contact-section {
+	padding: 80px 0 0;
+}
+.contact-inner {
+	position: relative;
+	text-align: center;
+	padding: 80px 40px;
+	border: 1px solid var(--border);
+	border-radius: 24px;
+	overflow: hidden;
+	background: var(--surface);
+}
+.contact-glow {
+	position: absolute;
+	width: 500px; height: 300px;
+	background: radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 70%);
+	top: 50%; left: 50%;
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
+.contact-heading {
+	font-size: clamp(2rem, 5vw, 3.5rem);
+	font-weight: 800;
+	margin: 16px 0 20px;
+	letter-spacing: -1.5px;
+}
+.contact-sub {
+	font-size: 1rem;
+	color: var(--text-secondary);
+	max-width: 480px;
+	margin: 0 auto 36px;
+	line-height: 1.7;
+}
+.contact-actions {
+	display: flex;
+	gap: 12px;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+/* ── Responsive ────────────────────────────────── */
+@media (max-width: 1024px) {
+	.hero-inner { grid-template-columns: 1fr; gap: 48px; }
+	.hero-right { display: none; }
+	.project-row { grid-template-columns: 40px 1fr; }
+	.project-cover { display: none; }
+}
+@media (max-width: 768px) {
+	.hero-heading { letter-spacing: -1.5px; }
+	.blog-grid { grid-template-columns: 1fr; }
+	.blog-card-featured { grid-column: 1; }
+	.projects-section, .contact-section { padding: 48px 0; }
+}
+@media (max-width: 480px) {
+	.hero { min-height: calc(100svh - 60px); }
+	.project-row { grid-template-columns: 1fr; }
+	.project-num { display: none; }
+}
+</style>
