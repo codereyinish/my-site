@@ -2,12 +2,13 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import { TECH_ICONS } from '../lib/techIcons';
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title="Projects — Inish Bista" description="Things I've built." />
+		<BaseHead title="Projects — Manish Bista" description="Things I've built." />
 	</head>
 	<body>
 		<Header />
@@ -39,12 +40,12 @@ import Header from '../components/Header.astro';
 							auto-formatted notes export. Designed with students as the primary user.
 						</p>
 						<div class="project-tech-row">
-							<span class="tech-tag">Python</span>
-							<span class="tech-tag">FastAPI</span>
-							<span class="tech-tag">OpenAI Whisper</span>
-							<span class="tech-tag">React</span>
-							<span class="tech-tag">WebSockets</span>
-							<span class="tech-tag">PostgreSQL</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['Python']}/>Python</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['FastAPI']}/>FastAPI</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['OpenAI Whisper']}/>OpenAI Whisper</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['React']}/>React</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['WebSockets']}/>WebSockets</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['PostgreSQL']}/>PostgreSQL</span>
 						</div>
 						<div class="project-links">
 							<span class="project-wip mono">GitHub · Demo — coming soon</span>
@@ -92,12 +93,12 @@ import Header from '../components/Header.astro';
 							ML project from data collection to deployment demo.
 						</p>
 						<div class="project-tech-row">
-							<span class="tech-tag">Python</span>
-							<span class="tech-tag">OpenAI API</span>
-							<span class="tech-tag">RAG</span>
-							<span class="tech-tag">Fine-tuning</span>
-							<span class="tech-tag">Jupyter</span>
-							<span class="tech-tag">Vector DB</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['Python']}/>Python</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['OpenAI API']}/>OpenAI API</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['RAG']}/>RAG</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['Fine-tuning']}/>Fine-tuning</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['Jupyter']}/>Jupyter</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['Vector DB']}/>Vector DB</span>
 						</div>
 						<div class="project-links">
 							<a href="https://github.com/codereyinish/MBGPT" target="_blank" rel="noopener" class="project-link">
@@ -157,6 +158,9 @@ import Header from '../components/Header.astro';
 	.project-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.75; max-width: 520px; margin-bottom: 16px; }
 	.project-tech-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
 	.tech-tag {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
 		font-family: var(--font-mono);
 		font-size: 11px;
 		padding: 4px 12px;
@@ -164,6 +168,7 @@ import Header from '../components/Header.astro';
 		border-radius: 4px;
 		color: var(--text-muted);
 	}
+	.tech-tag svg { width: 14px; height: 14px; flex-shrink: 0; display: block; }
 	.project-links { display: flex; gap: 16px; }
 	.project-link {
 		display: inline-flex;

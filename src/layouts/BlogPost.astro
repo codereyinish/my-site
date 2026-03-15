@@ -7,8 +7,9 @@ import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.props;
 const imgSeed = title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 ---
 
 <html lang="en">
@@ -20,13 +21,16 @@ const imgSeed = title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, 
 
 		<article class="post-article">
 			<!-- Hero cover -->
-			<div class="post-cover" style={`background-image:url('https://picsum.photos/seed/${imgSeed}/1600/700')`}>
+			<div class="post-cover" style={`background-image:url('${coverImg}')`}>
 				<div class="cover-overlay"></div>
 				<div class="container">
 					<div class="cover-content animate-fadeInDown">
-						<a href="/blog" class="back-crumb mono">
-							← Writing
-						</a>
+						<a href="/blog" class="back-crumb mono">← Writing</a>
+						{tags && tags.length > 0 && (
+							<div class="cover-tags">
+								{tags.map(t => <span class="cover-tag">{t}</span>)}
+							</div>
+						)}
 						<h1 class="post-title">{title}</h1>
 						{description && <p class="post-desc">{description}</p>}
 						<div class="post-meta mono">
@@ -91,10 +95,26 @@ const imgSeed = title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, 
 		letter-spacing: 1.5px;
 		text-transform: uppercase;
 		color: rgba(255,255,255,0.45);
-		margin-bottom: 24px;
+		margin-bottom: 16px;
 		transition: color 0.2s;
 	}
 	.back-crumb:hover { color: rgba(255,255,255,0.7); }
+	.cover-tags {
+		display: flex;
+		gap: 6px;
+		flex-wrap: wrap;
+		margin-bottom: 14px;
+	}
+	.cover-tag {
+		font-family: var(--font-mono);
+		font-size: 10px;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+		padding: 3px 10px;
+		border: 1px solid rgba(255,255,255,0.2);
+		border-radius: 4px;
+		color: rgba(255,255,255,0.5);
+	}
 	.post-title {
 		font-size: clamp(2rem, 5vw, 3.5rem);
 		font-weight: 800;
@@ -164,13 +184,68 @@ const imgSeed = title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, 
 		background: var(--surface);
 		border-radius: 0 8px 8px 0;
 	}
+	/* Images in post body */
 	.prose :global(img) {
 		width: 100%;
 		border-radius: 12px;
 		margin: 1.5rem 0;
 		border: 1px solid var(--border);
+		display: block;
+	}
+	/* Video embeds — wrap any iframe in a div for responsive ratio */
+	.prose :global(iframe) {
+		width: 100%;
+		aspect-ratio: 16/9;
+		border-radius: 12px;
+		border: 1px solid var(--border);
+		margin: 1.5rem 0;
+		display: block;
+	}
+	/* Native video */
+	.prose :global(video) {
+		width: 100%;
+		border-radius: 12px;
+		margin: 1.5rem 0;
+		border: 1px solid var(--border);
+		display: block;
+	}
+	.prose :global(code) {
+		font-family: var(--font-mono);
+		font-size: 0.88em;
+		background: var(--surface2);
+		border: 1px solid var(--border);
+		padding: 2px 6px;
+		border-radius: 4px;
+		color: var(--cyan);
+	}
+	.prose :global(pre) {
+		background: var(--surface2);
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		padding: 1.25rem 1.5rem;
+		overflow-x: auto;
+		margin: 1.5rem 0;
+	}
+	.prose :global(pre code) {
+		background: none;
+		border: none;
+		padding: 0;
+		font-size: 0.9em;
+		color: var(--text-secondary);
 	}
 	.prose :global(hr) { margin: 3rem 0; border-color: var(--border); }
+	.prose :global(table) {
+		width: 100%;
+		border-collapse: collapse;
+		margin: 1.5rem 0;
+		font-size: 0.95em;
+	}
+	.prose :global(th), .prose :global(td) {
+		padding: 10px 14px;
+		border: 1px solid var(--border);
+		text-align: left;
+	}
+	.prose :global(th) { background: var(--surface2); color: var(--text); font-weight: 600; }
 
 	/* Footer nav */
 	.post-footer { margin-top: 3rem; }

@@ -2,12 +2,13 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import { TECH_ICONS } from '../lib/techIcons';
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title="Resume — Inish Bista" description="Inish Bista's resume." />
+		<BaseHead title="Resume — Manish Bista" description="Manish Bista's resume." />
 	</head>
 	<body>
 		<Header />
@@ -16,8 +17,8 @@ import Header from '../components/Header.astro';
 				<div class="page-header animate-fadeInDown">
 					<p class="eyebrow mono">CV</p>
 					<h1>Résumé</h1>
-					<p class="page-sub">CS student, graduating May 2025. Open to full-time roles.</p>
-					<a href="mailto:inishbista@gmail.com" class="btn btn-primary" style="margin-top:24px;display:inline-flex">
+					<p class="page-sub">CS student, graduating May 2026. Open to full-time roles.</p>
+					<a href="mailto:manishbista@gmail.com" class="btn btn-primary" style="margin-top:24px;display:inline-flex">
 						Request resume PDF
 						<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
 					</a>
@@ -55,7 +56,7 @@ import Header from '../components/Header.astro';
 											<h3 class="item-role">B.S. Computer Science</h3>
 											<p class="item-org">St. Joseph's College New York</p>
 										</div>
-										<span class="item-date mono">2021 – 2025</span>
+										<span class="item-date mono">2021 – 2026</span>
 									</div>
 								</div>
 							</div>
@@ -101,25 +102,25 @@ import Header from '../components/Header.astro';
 							<div class="skills-group">
 								<p class="skill-label">Languages</p>
 								<div class="skill-tags">
-									<span>Python</span><span>TypeScript</span><span>SQL</span><span>JavaScript</span>
+									<span><Fragment set:html={TECH_ICONS['Python']}/>Python</span><span><Fragment set:html={TECH_ICONS['TypeScript']}/>TypeScript</span><span><Fragment set:html={TECH_ICONS['SQL']}/>SQL</span><span><Fragment set:html={TECH_ICONS['JavaScript']}/>JavaScript</span>
 								</div>
 							</div>
 							<div class="skills-group">
 								<p class="skill-label">Frameworks</p>
 								<div class="skill-tags">
-									<span>FastAPI</span><span>React</span><span>Next.js</span>
+									<span><Fragment set:html={TECH_ICONS['FastAPI']}/>FastAPI</span><span><Fragment set:html={TECH_ICONS['React']}/>React</span><span><Fragment set:html={TECH_ICONS['Next.js']}/>Next.js</span>
 								</div>
 							</div>
 							<div class="skills-group">
 								<p class="skill-label">AI / ML</p>
 								<div class="skill-tags">
-									<span>OpenAI API</span><span>Whisper</span><span>RAG</span><span>Fine-tuning</span>
+									<span><Fragment set:html={TECH_ICONS['OpenAI API']}/>OpenAI API</span><span><Fragment set:html={TECH_ICONS['Whisper']}/>Whisper</span><span><Fragment set:html={TECH_ICONS['RAG']}/>RAG</span><span><Fragment set:html={TECH_ICONS['Fine-tuning']}/>Fine-tuning</span>
 								</div>
 							</div>
 							<div class="skills-group">
 								<p class="skill-label">Tools</p>
 								<div class="skill-tags">
-									<span>Git</span><span>Docker</span><span>Vercel</span><span>PostgreSQL</span>
+									<span><Fragment set:html={TECH_ICONS['Git']}/>Git</span><span><Fragment set:html={TECH_ICONS['Docker']}/>Docker</span><span><Fragment set:html={TECH_ICONS['Vercel']}/>Vercel</span><span><Fragment set:html={TECH_ICONS['PostgreSQL']}/>PostgreSQL</span>
 								</div>
 							</div>
 						</div>
@@ -208,6 +209,9 @@ import Header from '../components/Header.astro';
 	.skill-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
 	.skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 	.skill-tags span {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
 		font-family: var(--font-mono);
 		font-size: 11px;
 		padding: 3px 10px;
@@ -215,6 +219,7 @@ import Header from '../components/Header.astro';
 		border-radius: 4px;
 		color: var(--text-muted);
 	}
+	.skill-tags span svg { width: 14px; height: 14px; flex-shrink: 0; display: block; }
 
 	@media (max-width: 768px) {
 		.resume-grid { grid-template-columns: 1fr; }

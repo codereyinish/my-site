@@ -2,12 +2,13 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import { TECH_ICONS } from '../lib/techIcons';
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title="About — Inish Bista" description="CS student at St. Joseph's College NY, originally from Nepal." />
+		<BaseHead title="About — Manish Bista" description="CS student at St. Joseph's College NY, originally from Nepal." />
 	</head>
 	<body>
 		<Header />
@@ -19,16 +20,16 @@ import Header from '../components/Header.astro';
 					<div class="about-intro">
 						<p class="eyebrow mono">About</p>
 						<h1>
-							I'm Inish,<br/>
+							I'm Manish,<br/>
 							a <span class="serif">builder</span> from Nepal<span style="color:var(--blue)">.</span>
 						</h1>
 						<p class="about-lead">
-							CS student at St. Joseph's College NY, graduating May 2025.
+							CS student at St. Joseph's College NY, graduating May 2026.
 							I build AI-powered software and write about what I learn along the way.
 						</p>
 					</div>
 					<div class="about-photo-wrap">
-						<div class="about-photo" style="background-image:url('https://picsum.photos/seed/inish-about-v3/600/700')"></div>
+						<div class="about-photo" style="background-image:url('/manish-portrait.jpg')"></div>
 					</div>
 				</div>
 
@@ -81,7 +82,7 @@ import Header from '../components/Header.astro';
 								</li>
 								<li>
 									<span class="fact-label">Graduating</span>
-									<span class="fact-val">May 2025</span>
+									<span class="fact-val">May 2026</span>
 								</li>
 								<li>
 									<span class="fact-label">Based in</span>
@@ -101,25 +102,25 @@ import Header from '../components/Header.astro';
 						<div class="sidebar-card">
 							<h3 class="card-title mono">Tech I use</h3>
 							<div class="tech-list">
-								<span class="tech-item">Python</span>
-								<span class="tech-item">FastAPI</span>
-								<span class="tech-item">React</span>
-								<span class="tech-item">TypeScript</span>
-								<span class="tech-item">OpenAI API</span>
-								<span class="tech-item">Whisper</span>
-								<span class="tech-item">SQL</span>
-								<span class="tech-item">Docker</span>
+								<span class="tech-item"><Fragment set:html={TECH_ICONS['Python']}/>Python</span>
+								<span class="tech-item"><Fragment set:html={TECH_ICONS['FastAPI']}/>FastAPI</span>
+								<span class="tech-item"><Fragment set:html={TECH_ICONS['React']}/>React</span>
+								<span class="tech-item"><Fragment set:html={TECH_ICONS['TypeScript']}/>TypeScript</span>
+								<span class="tech-item"><Fragment set:html={TECH_ICONS['OpenAI API']}/>OpenAI API</span>
+								<span class="tech-item"><Fragment set:html={TECH_ICONS['Whisper']}/>Whisper</span>
+								<span class="tech-item"><Fragment set:html={TECH_ICONS['SQL']}/>SQL</span>
+								<span class="tech-item"><Fragment set:html={TECH_ICONS['Docker']}/>Docker</span>
 							</div>
 						</div>
 
 						<div class="sidebar-card contact-card">
 							<h3 class="card-title mono">Get in touch</h3>
 							<div class="contact-list">
-								<a href="mailto:inishbista@gmail.com" class="contact-item">
+								<a href="mailto:manishbista@gmail.com" class="contact-item">
 									<span class="contact-label">Email</span>
 									<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
 								</a>
-								<a href="https://linkedin.com/in/inishbista" target="_blank" rel="noopener" class="contact-item">
+								<a href="https://linkedin.com/in/manishbista" target="_blank" rel="noopener" class="contact-item">
 									<span class="contact-label">LinkedIn</span>
 									<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
 								</a>
@@ -157,9 +158,8 @@ import Header from '../components/Header.astro';
 		aspect-ratio: 6/7;
 		border-radius: 20px;
 		background-size: cover;
-		background-position: center;
+		background-position: top center;
 		background-color: var(--surface);
-		border: 1px solid var(--border);
 	}
 
 	.section-divider { margin-bottom: 64px; }
@@ -220,6 +220,9 @@ import Header from '../components/Header.astro';
 	.fact-val { color: var(--text-secondary); }
 	.tech-list { display: flex; flex-wrap: wrap; gap: 6px; }
 	.tech-item {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
 		font-family: var(--font-mono);
 		font-size: 11px;
 		padding: 3px 10px;
@@ -227,6 +230,7 @@ import Header from '../components/Header.astro';
 		border-radius: 4px;
 		color: var(--text-muted);
 	}
+	.tech-item svg { width: 14px; height: 14px; flex-shrink: 0; display: block; }
 	.contact-list { display: flex; flex-direction: column; gap: 0; }
 	.contact-item {
 		display: flex;

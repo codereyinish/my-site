@@ -9,124 +9,455 @@ import { SITE_TITLE } from '../../consts';
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+// Base tag set — always shown even if no posts have them yet
+const baseTags = ['AI', 'Building', 'Python', 'Web', 'React', 'Startups', 'Tools', 'Learning', 'Career', 'Life', 'Tutorial'];
+const allTags: string[] = ['All Posts', ...baseTags];
+posts.forEach(post => {
+	(post.data.tags ?? []).forEach(t => {
+		if (!allTags.includes(t)) allTags.push(t);
+	});
+});
+
+function readTime(body: string | undefined) {
+	if (!body) return '5 min read';
+	return `${Math.max(1, Math.ceil(body.trim().split(/\s+/).length / 200))} min read`;
+}
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`Writing — ${SITE_TITLE}`} description="Essays, notes, and ideas from Inish Bista." />
+		<BaseHead title={`Writing — ${SITE_TITLE}`} description="Essays, notes, and ideas from Manish Bista." />
 	</head>
 	<body>
 		<Header />
 		<main class="page-main">
-			<div class="container">
-				<div class="page-header animate-fadeInDown">
-					<p class="eyebrow mono">Writing</p>
-					<h1>All <span class="serif">Articles</span></h1>
-					<p class="page-sub">Essays, notes, and ideas on software, learning, and life.</p>
-				</div>
 
-				<div class="section-divider"></div>
+			<!-- ── Centered hero ── -->
+			<div class="blog-hero animate-fadeInDown">
+				<p class="eyebrow mono">Writing</p>
+				<h1>Thoughts &amp; <span class="serif">Writing</span></h1>
+				<p class="hero-sub">Essays, experiments, and notes on software, AI, and building things.</p>
+			</div>
 
-				<div class="posts-grid">
-					{posts.map((post, i) => (
-						<a href={`/blog/${post.id}/`} class={`post-card animate-fadeInUp delay-${Math.min(i+1,5)}`}>
-							<div class="post-img" style={`background-image:url('https://picsum.photos/seed/${post.id}-idx/800/500')`}>
-								<div class="post-img-overlay"></div>
+			<!-- ── Filter + Search bar ── -->
+			<div class="filter-wrap animate-fadeInDown delay-1">
+				<div class="filter-bar">
+					<div class="filter-tags" id="filter-tags">
+						{allTags.map((tag, i) => (
+							<button
+								class={`filter-btn${i === 0 ? ' active' : ''}`}
+								data-tag={tag}
+							>{tag}</button>
+						))}
+					</div>
+					<div class="search-right">
+						<div class="search-wrap">
+							<svg class="search-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+							<input
+								type="text"
+								id="search-input"
+								class="search-input"
+								placeholder="Search posts"
+								autocomplete="off"
+							/>
+							<div class="kbd-group">
+								<kbd>⌘</kbd><kbd>K</kbd>
 							</div>
-							<div class="post-body">
-								<span class="post-date mono">
-									<FormattedDate date={post.data.pubDate} />
-								</span>
-								<h2 class="post-title">{post.data.title}</h2>
-								{post.data.description && (
-									<p class="post-desc">{post.data.description}</p>
-								)}
-								<span class="post-cta">
-									Read article
-									<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-								</span>
-							</div>
+						</div>
+						<a href="/rss.xml" class="rss-btn" aria-label="RSS Feed">
+							<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1" fill="currentColor"/></svg>
 						</a>
-					))}
+					</div>
 				</div>
 			</div>
+
+			<!-- ── Posts grid ── -->
+			<div class="grid-wrap">
+				<div class="posts-grid" id="posts-grid">
+					{posts.map((post) => {
+						const tags = post.data.tags ?? [];
+						return (
+							<a
+								href={`/blog/${post.id}/`}
+								class="post-card animate-fadeInUp"
+								data-tags={JSON.stringify(tags)}
+								data-title={post.data.title.toLowerCase()}
+								data-desc={(post.data.description ?? '').toLowerCase()}
+							>
+								<div class="post-img-wrap">
+									<div class="post-img" style={`background-image:url('${post.data.heroImage ?? `https://picsum.photos/seed/${post.id}-v4/800/500`}')`}></div>
+								</div>
+								<div class="post-body">
+									<div class="post-tag-row">
+										{tags.map(t => <span class="post-tag">{t}</span>)}
+									</div>
+									<h2 class="post-title">{post.data.title}</h2>
+									{post.data.description && (
+										<p class="post-desc">{post.data.description}</p>
+									)}
+									<div class="post-meta">
+										<span class="post-date mono"><FormattedDate date={post.data.pubDate} /></span>
+										<span class="meta-sep">·</span>
+										<span class="post-read mono">{readTime(post.body)}</span>
+									</div>
+								</div>
+							</a>
+						);
+					})}
+				</div>
+
+				<div class="empty-state" id="empty-state" style="display:none">
+					<p class="mono">No posts found.</p>
+				</div>
+			</div>
+
 		</main>
 		<Footer />
 	</body>
 </html>
 
 <style>
-	.page-main {
-		padding-top: 100px;
-		position: relative;
-		z-index: 10;
-	}
-	.page-header { padding: 40px 0 48px; }
-	.eyebrow {
-		font-size: 11px;
-		letter-spacing: 2.5px;
-		text-transform: uppercase;
-		color: var(--text-muted);
-		margin-bottom: 12px;
-	}
-	h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 16px; }
-	.page-sub { color: var(--text-secondary); font-size: 1rem; max-width: 440px; margin: 0; }
-	.section-divider { margin-bottom: 48px; }
-	.posts-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 20px;
-		padding-bottom: 80px;
-	}
-	.post-card {
-		display: flex;
-		flex-direction: column;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: 14px;
-		overflow: hidden;
-		text-decoration: none;
-		transition: border-color 0.2s, transform 0.2s;
-	}
-	.post-card:hover {
-		border-color: var(--border-light);
-		transform: translateY(-3px);
-	}
-	.post-img {
-		position: relative;
-		padding-top: 58%;
-		background-size: cover;
-		background-position: center;
-		background-color: var(--surface2);
-	}
-	.post-img-overlay {
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.4));
-	}
-	.post-body {
-		padding: 18px 18px 16px;
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
-		flex: 1;
-	}
-	.post-date { font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; }
-	.post-title { font-size: 1rem; font-weight: 600; color: var(--text); margin: 0; line-height: 1.35; letter-spacing: -0.2px; }
-	.post-desc { font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-	.post-cta {
-		display: inline-flex;
-		align-items: center;
-		gap: 5px;
-		margin-top: auto;
-		padding-top: 10px;
-		font-size: 12px;
-		font-weight: 500;
-		color: var(--text-muted);
-		transition: color 0.2s;
-	}
-	.post-card:hover .post-cta { color: var(--blue); }
-	@media (max-width: 900px) { .posts-grid { grid-template-columns: 1fr 1fr; } }
-	@media (max-width: 580px) { .posts-grid { grid-template-columns: 1fr; } .page-main { padding-top: 80px; } }
+.page-main { padding-top: 100px; position: relative; z-index: 10; }
+
+/* ── Hero — centered ── */
+.blog-hero {
+	text-align: center;
+	padding: 40px 24px 32px;
+	position: relative;
+}
+.eyebrow {
+	font-size: 11px;
+	letter-spacing: 2.5px;
+	text-transform: uppercase;
+	color: var(--text-muted);
+	margin-bottom: 12px;
+}
+h1 {
+	font-size: clamp(2rem, 4vw, 3rem);
+	font-weight: 800;
+	letter-spacing: -1.5px;
+	line-height: 1.1;
+	margin-bottom: 14px;
+	color: var(--text);
+}
+/* Animated gradient on the serif italic */
+h1 .serif {
+	background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 40%, #cbd5e1 70%, #e2e8f0 100%);
+	background-size: 200% auto;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	animation: shimmer-text 4s linear infinite;
+}
+@keyframes shimmer-text {
+	from { background-position: 0% center; }
+	to   { background-position: 200% center; }
+}
+.hero-sub {
+	font-size: 0.95rem;
+	color: var(--text-secondary);
+	max-width: 480px;
+	margin: 0 auto;
+	line-height: 1.7;
+}
+
+/* ── Filter bar ── */
+.filter-wrap {
+	border-top: 1px solid var(--border);
+	border-bottom: 1px solid var(--border);
+	margin: 0 0 0;
+}
+.filter-bar {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 64px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	height: 60px;
+}
+.filter-tags {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	flex: 1;
+	overflow-x: auto;
+	scrollbar-width: none;
+}
+.filter-tags::-webkit-scrollbar { display: none; }
+
+.filter-btn {
+	padding: 5px 14px;
+	border-radius: 8px;
+	border: none;
+	background: transparent;
+	color: var(--text-muted);
+	font-family: var(--font-sans);
+	font-size: 13px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: color 0.15s, background 0.15s;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+.filter-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.filter-btn.active {
+	background: var(--surface2);
+	color: var(--text);
+	border: 1px solid var(--border-light);
+	border-radius: 8px;
+}
+
+.search-right {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-shrink: 0;
+}
+.search-wrap {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 100px;
+	padding: 7px 10px 7px 14px;
+	transition: border-color 0.2s;
+	color: var(--text-muted);
+}
+.search-wrap:focus-within { border-color: var(--border-light); }
+.search-icon { flex-shrink: 0; }
+.search-input {
+	background: none;
+	border: none;
+	outline: none;
+	color: var(--text);
+	font-family: var(--font-sans);
+	font-size: 13px;
+	width: 130px;
+}
+.search-input::placeholder { color: var(--text-muted); }
+.kbd-group {
+	display: flex;
+	align-items: center;
+	gap: 3px;
+	flex-shrink: 0;
+}
+kbd {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 22px;
+	height: 22px;
+	padding: 0 5px;
+	background: var(--surface2);
+	border: 1px solid var(--border-light);
+	border-radius: 5px;
+	font-family: var(--font-mono);
+	font-size: 11px;
+	color: var(--text-muted);
+	line-height: 1;
+}
+.rss-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 100px;
+	color: var(--text-muted);
+	transition: border-color 0.2s, color 0.2s;
+	flex-shrink: 0;
+}
+.rss-btn:hover { border-color: var(--border-light); color: var(--text); }
+
+/* ── Grid ── */
+.grid-wrap {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 40px 64px 80px;
+}
+.posts-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+}
+
+/* ── Card ── */
+.post-card {
+	display: flex;
+	flex-direction: column;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 16px;
+	overflow: hidden;
+	text-decoration: none;
+	transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.post-card:hover {
+	border-color: var(--border-light);
+	transform: translateY(-3px);
+	box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+/* Image on top — rounded inside card */
+.post-img-wrap {
+	padding: 10px 10px 0;
+}
+.post-img {
+	width: 100%;
+	aspect-ratio: 16/10;
+	background-size: cover;
+	background-position: center;
+	background-color: var(--surface2);
+	border-radius: 10px;
+	overflow: hidden;
+	transition: transform 0.4s ease;
+}
+.post-card:hover .post-img {
+	transform: scale(1.02);
+}
+
+/* Text below image */
+.post-body {
+	padding: 16px 18px 18px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	flex: 1;
+}
+.post-tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.post-tag {
+	font-family: var(--font-mono);
+	font-size: 10px;
+	letter-spacing: 0.5px;
+	color: var(--text-muted);
+	border: 1px solid var(--border);
+	border-radius: 4px;
+	padding: 2px 8px;
+	text-transform: uppercase;
+}
+.post-title {
+	font-size: 1rem;
+	font-weight: 700;
+	color: var(--text);
+	margin: 0;
+	line-height: 1.4;
+	letter-spacing: -0.2px;
+}
+.post-desc {
+	font-size: 13px;
+	color: var(--text-secondary);
+	margin: 0;
+	line-height: 1.6;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	flex: 1;
+}
+.post-meta {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 8px;
+	padding-top: 12px;
+	border-top: 1px solid var(--border);
+}
+.post-date, .post-read {
+	font-size: 11px;
+	color: var(--text-muted);
+	letter-spacing: 0.3px;
+}
+.meta-sep { color: var(--text-muted); font-size: 11px; }
+
+/* ── Empty ── */
+.empty-state {
+	text-align: center;
+	padding: 80px 0;
+	color: var(--text-muted);
+	font-size: 14px;
+}
+.post-card.hidden { display: none; }
+
+@media (max-width: 1100px) { .posts-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px) {
+	.posts-grid { grid-template-columns: 1fr; }
+	.page-main { padding-top: 80px; }
+	.filter-bar { padding: 0 20px; }
+	.grid-wrap { padding: 32px 20px 60px; }
+}
 </style>
+
+<script>
+const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+const allBtn     = document.querySelector<HTMLButtonElement>('.filter-btn[data-tag="All Posts"]')!;
+const cards      = document.querySelectorAll<HTMLElement>('.post-card');
+const searchEl   = document.getElementById('search-input') as HTMLInputElement;
+const emptyEl    = document.getElementById('empty-state') as HTMLElement;
+
+// Multi-select: Set of active tags. Empty = show all.
+let selectedTags = new Set<string>();
+let searchTerm   = '';
+
+function syncButtons() {
+	filterBtns.forEach(btn => {
+		const tag = btn.dataset.tag!;
+		if (tag === 'All Posts') {
+			btn.classList.toggle('active', selectedTags.size === 0);
+		} else {
+			btn.classList.toggle('active', selectedTags.has(tag));
+		}
+	});
+}
+
+function applyFilters() {
+	let visible = 0;
+	cards.forEach(card => {
+		const tags: string[] = JSON.parse(card.dataset.tags || '[]');
+		const title = card.dataset.title || '';
+		const desc  = card.dataset.desc  || '';
+		// Tag match: no selection = all, else post must have at least one selected tag
+		const tagMatch  = selectedTags.size === 0 || tags.some(t => selectedTags.has(t));
+		const termMatch = !searchTerm || title.includes(searchTerm) || desc.includes(searchTerm);
+		if (tagMatch && termMatch) { card.classList.remove('hidden'); visible++; }
+		else card.classList.add('hidden');
+	});
+	emptyEl.style.display = visible === 0 ? 'block' : 'none';
+}
+
+filterBtns.forEach(btn => {
+	btn.addEventListener('click', () => {
+		const tag = btn.dataset.tag!;
+		if (tag === 'All Posts') {
+			selectedTags.clear();
+		} else {
+			if (selectedTags.has(tag)) {
+				selectedTags.delete(tag);
+			} else {
+				selectedTags.add(tag);
+			}
+		}
+		syncButtons();
+		applyFilters();
+	});
+});
+
+searchEl?.addEventListener('input', () => {
+	searchTerm = searchEl.value.toLowerCase().trim();
+	applyFilters();
+});
+
+// ⌘K shortcut focuses search
+document.addEventListener('keydown', (e) => {
+	if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+		e.preventDefault();
+		searchEl?.focus();
+	}
+});
+</script>
