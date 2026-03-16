@@ -1039,8 +1039,11 @@ const aimlBadges  = ['OpenAI API', 'Whisper', 'RAG', 'Fine-tuning', 'Jupyter', '
 
 /* ── Responsive ────────────────────────────── */
 @media (max-width: 1024px) {
-	.hero-inner { grid-template-columns: 1fr; gap: 40px; }
-	.hero-portrait-wrap { display: none; }
+	.hero-inner { grid-template-columns: 1fr; gap: 32px; }
+	.hero-right { order: -1; display: flex; justify-content: center; }
+	.hero-portrait-wrap { display: flex; }
+	.hero-portrait { max-width: 200px; aspect-ratio: 1/1; border-radius: 50%; object-position: top; }
+	.sq { display: none; }
 	.project-row { grid-template-columns: 40px 1fr; }
 	.project-demo { display: none; }
 }
