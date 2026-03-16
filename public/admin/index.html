@@ -71,6 +71,9 @@
   <body>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
     <script>
+      // Style the preview pane to match the actual blog
+      CMS.registerPreviewStyle('/admin/preview.css');
+
       CMS.init({
         config: {
           backend: {
