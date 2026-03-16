@@ -2,7 +2,7 @@ backend:
   name: github
   repo: codereyinish/my-site
   branch: main
-  base_url: https://my-site-gwgmbtkqo-manishs-projects-530c5920.vercel.app
+  base_url: https://my-site-nine-dun.vercel.app
   auth_endpoint: /api/auth
 
 media_folder: public/blog
