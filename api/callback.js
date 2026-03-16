@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   }
 
   if (!code) {
-    return res.status(400).send('Missing code. Params: ' + JSON.stringify(req.query));
+    return res.status(400).send('Missing code');
   }
 
   let data;
@@ -33,28 +33,38 @@ export default async function handler(req, res) {
     </body></html>`);
   }
 
-  const message = `authorization:github:success:${JSON.stringify({ token: data.access_token, provider: 'github' })}`;
-  const msgJson = JSON.stringify(message);
+  const msg = `authorization:github:success:${JSON.stringify({ token: data.access_token, provider: 'github' })}`;
+  const msgJson = JSON.stringify(msg);
 
+  // Store token in localStorage so the admin page can pick it up
+  // regardless of whether this runs in a popup or the main window.
   res.send(`<!doctype html><html><body><script>
     const msg = ${msgJson};
 
-    // Chrome / Firefox: window.opener is still alive after cross-origin redirect
+    // Always store — admin page reads this on load or when window.open is called
+    try { localStorage.setItem('decap-auth-token', msg); } catch(e) {}
+
     if (window.opener) {
+      // Chrome/Firefox: opener still alive, send directly
       window.opener.postMessage(msg, '*');
       window.close();
     } else {
-      // Safari: opener is killed after visiting github.com (cross-origin).
-      // Use BroadcastChannel — same-origin pages in the same browser share it.
+      // Safari: opener killed after cross-origin navigation
+      // BroadcastChannel notifies the admin tab
       try {
         const bc = new BroadcastChannel('decap-auth');
         bc.postMessage(msg);
         bc.close();
-        document.body.innerHTML = '<p style="font-family:sans-serif;padding:40px;color:#333">✓ Authenticated! Closing…</p>';
-        setTimeout(() => window.close(), 800);
-      } catch(e) {
-        document.body.innerHTML = '<p style="font-family:sans-serif;padding:40px;color:red">Auth succeeded but could not notify CMS: ' + e.message + '</p>';
-      }
+      } catch(e) {}
+
+      document.body.innerHTML = '<p style="font-family:sans-serif;padding:40px;color:#333">✓ Authenticated! Returning to CMS&hellip;</p>';
+
+      // Try to close this window; if it won't close (main-window redirect),
+      // navigate back to /admin where the stored token will be picked up.
+      setTimeout(() => {
+        window.close();
+        setTimeout(() => { window.location.href = '/admin'; }, 400);
+      }, 600);
     }
-  </script></body></html>`);
+  <\/script></body></html>`);
 }

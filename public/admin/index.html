@@ -6,20 +6,67 @@
     <meta name="robots" content="noindex" />
     <title>Content Manager</title>
     <script>window.CMS_MANUAL_INIT = true;</script>
+
     <script>
-      // Safari fix: window.opener is killed after cross-origin OAuth redirect.
-      // BroadcastChannel lets the callback page talk directly to this page.
+      // ── Safari-compatible OAuth token receiver ──────────────────────────────
+      // Problem: Safari kills window.opener after the popup visits GitHub
+      // (a cross-origin site), so the standard postMessage can't get back.
+      //
+      // Solution: store the token in localStorage in callback.js, then use
+      // three mechanisms to inject it into Decap CMS as soon as it's listening:
+      //
+      //  A) BroadcastChannel  – popup is alive, opener is dead  (Safari popup)
+      //  B) storage event     – another tab wrote localStorage  (any redirect)
+      //  C) window.open hook  – page reloaded with a stored token (redirect fallback)
+
+      const AUTH_KEY = 'decap-auth-token';
+
+      function dispatchAuthMsg(msg) {
+        window.dispatchEvent(new MessageEvent('message', {
+          data: msg,
+          origin: window.location.origin,
+        }));
+      }
+
+      // A) BroadcastChannel: popup sends message, we forward it to CMS
+      //    Also store in localStorage in case CMS isn't listening yet.
       if ('BroadcastChannel' in window) {
         const bc = new BroadcastChannel('decap-auth');
         bc.onmessage = (e) => {
-          // Re-dispatch as a window message so Decap CMS picks it up normally.
-          window.dispatchEvent(new MessageEvent('message', {
-            data: e.data,
-            origin: window.location.origin,
-          }));
+          localStorage.setItem(AUTH_KEY, e.data); // backup
+          dispatchAuthMsg(e.data);
           bc.close();
         };
       }
+
+      // B) storage event: fires in THIS tab when ANOTHER tab/popup writes localStorage
+      window.addEventListener('storage', (e) => {
+        if (e.key === AUTH_KEY && e.newValue) {
+          localStorage.removeItem(AUTH_KEY);
+          dispatchAuthMsg(e.newValue);
+        }
+      });
+
+      // C) window.open hook: when CMS opens the OAuth popup, Decap CMS has JUST
+      //    registered its message listener. If we have a stored token from a
+      //    previous redirect, inject it immediately instead of going through OAuth again.
+      const _origOpen = window.open;
+      window.open = function(url, name, features) {
+        if (name === 'netlify-cms-auth' || (typeof url === 'string' && url.includes('/api/auth'))) {
+          const stored = localStorage.getItem(AUTH_KEY);
+          if (stored) {
+            localStorage.removeItem(AUTH_KEY);
+            // CMS just registered its listener — dispatch after a tiny delay
+            setTimeout(() => dispatchAuthMsg(stored), 50);
+            // Return a fake window so CMS doesn't throw; mark it closed quickly
+            // so CMS's "popup closed" interval doesn't fire an error first.
+            const fake = { closed: false, location: { href: url }, close() { this.closed = true; } };
+            setTimeout(() => { fake.closed = true; }, 2000);
+            return fake;
+          }
+        }
+        return _origOpen.apply(this, arguments);
+      };
     </script>
   </head>
   <body>
