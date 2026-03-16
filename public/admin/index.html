@@ -8,64 +8,93 @@
     <script>window.CMS_MANUAL_INIT = true;</script>
 
     <script>
-      // ── Safari-compatible OAuth token receiver ──────────────────────────────
-      // Problem: Safari kills window.opener after the popup visits GitHub
-      // (a cross-origin site), so the standard postMessage can't get back.
-      //
-      // Solution: store the token in localStorage in callback.js, then use
-      // three mechanisms to inject it into Decap CMS as soon as it's listening:
-      //
-      //  A) BroadcastChannel  – popup is alive, opener is dead  (Safari popup)
-      //  B) storage event     – another tab wrote localStorage  (any redirect)
-      //  C) window.open hook  – page reloaded with a stored token (redirect fallback)
+      // ── Visible debug overlay ──────────────────────────────────────────────
+      // Shows what the auth code is doing in real-time (bottom-right corner).
+      function authLog(msg) {
+        let el = document.getElementById('auth-log');
+        if (!el) {
+          el = document.createElement('div');
+          el.id = 'auth-log';
+          el.style.cssText = [
+            'position:fixed','bottom:10px','right:10px','z-index:99999',
+            'background:rgba(0,0,0,0.85)','color:#0f0','font-family:monospace',
+            'font-size:11px','padding:10px 14px','border-radius:8px',
+            'max-width:440px','max-height:220px','overflow:auto',
+            'line-height:1.6','pointer-events:none',
+          ].join(';');
+          document.body ? document.body.appendChild(el) : document.addEventListener('DOMContentLoaded', () => document.body.appendChild(el));
+        }
+        const t = new Date().toISOString().slice(11,19);
+        el.innerHTML += `<div>${t} ${msg}</div>`;
+        el.scrollTop = el.scrollHeight;
+      }
 
       const AUTH_KEY = 'decap-auth-token';
 
       function dispatchAuthMsg(msg) {
+        authLog('→ dispatching message to CMS…');
         window.dispatchEvent(new MessageEvent('message', {
           data: msg,
           origin: window.location.origin,
         }));
+        authLog('✓ message dispatched');
       }
 
-      // A) BroadcastChannel: popup sends message, we forward it to CMS
-      //    Also store in localStorage in case CMS isn't listening yet.
+      // A) Check localStorage on load (covers redirect-based flow where page reloaded)
+      const pendingToken = localStorage.getItem(AUTH_KEY);
+      if (pendingToken) {
+        authLog('found stored token, waiting for CMS listener…');
+        localStorage.removeItem(AUTH_KEY);
+        // Delay to let Decap CMS load and register its message listener
+        setTimeout(() => dispatchAuthMsg(pendingToken), 2500);
+      }
+
+      // B) BroadcastChannel: popup sends token, we forward to CMS
       if ('BroadcastChannel' in window) {
+        authLog('BroadcastChannel: listening');
         const bc = new BroadcastChannel('decap-auth');
         bc.onmessage = (e) => {
-          localStorage.setItem(AUTH_KEY, e.data); // backup
+          authLog('BroadcastChannel: message received!');
           dispatchAuthMsg(e.data);
           bc.close();
         };
+      } else {
+        authLog('BroadcastChannel: NOT supported');
       }
 
-      // B) storage event: fires in THIS tab when ANOTHER tab/popup writes localStorage
+      // C) storage event: fires here when another tab/popup writes localStorage
       window.addEventListener('storage', (e) => {
         if (e.key === AUTH_KEY && e.newValue) {
+          authLog('storage event: token received!');
           localStorage.removeItem(AUTH_KEY);
           dispatchAuthMsg(e.newValue);
         }
       });
 
-      // C) window.open hook: when CMS opens the OAuth popup, Decap CMS has JUST
-      //    registered its message listener. If we have a stored token from a
-      //    previous redirect, inject it immediately instead of going through OAuth again.
-      const _origOpen = window.open;
+      // D) Intercept postMessage: log every incoming message so we can see what CMS receives
+      window.addEventListener('message', (e) => {
+        if (typeof e.data === 'string' && e.data.startsWith('authorization:')) {
+          authLog('✅ auth message received from origin: ' + e.origin);
+        }
+      });
+
+      // E) window.open interceptor — if we already have a stored token, inject it
+      // immediately when CMS opens the popup (CMS registers its listener right before)
+      const _origOpen = window.open.bind(window);
       window.open = function(url, name, features) {
+        authLog('window.open: ' + name + ' → ' + (url || '').slice(0, 60));
         if (name === 'netlify-cms-auth' || (typeof url === 'string' && url.includes('/api/auth'))) {
           const stored = localStorage.getItem(AUTH_KEY);
           if (stored) {
+            authLog('stored token found, injecting…');
             localStorage.removeItem(AUTH_KEY);
-            // CMS just registered its listener — dispatch after a tiny delay
-            setTimeout(() => dispatchAuthMsg(stored), 50);
-            // Return a fake window so CMS doesn't throw; mark it closed quickly
-            // so CMS's "popup closed" interval doesn't fire an error first.
+            setTimeout(() => dispatchAuthMsg(stored), 80);
             const fake = { closed: false, location: { href: url }, close() { this.closed = true; } };
-            setTimeout(() => { fake.closed = true; }, 2000);
+            setTimeout(() => { fake.closed = true; }, 3000);
             return fake;
           }
         }
-        return _origOpen.apply(this, arguments);
+        return _origOpen(url, name, features);
       };
     </script>
   </head>
@@ -95,55 +124,13 @@
               format: 'frontmatter',
               slug: '{{slug}}',
               fields: [
-                {
-                  label: 'Title',
-                  name: 'title',
-                  widget: 'string',
-                  hint: 'The post title — shown as the big heading',
-                },
-                {
-                  label: 'Description',
-                  name: 'description',
-                  widget: 'string',
-                  hint: 'One-line summary shown on cards and in search results',
-                },
-                {
-                  label: 'Publish Date',
-                  name: 'pubDate',
-                  widget: 'datetime',
-                  date_format: 'YYYY-MM-DD',
-                  time_format: false,
-                },
-                {
-                  label: 'Updated Date',
-                  name: 'updatedDate',
-                  widget: 'datetime',
-                  date_format: 'YYYY-MM-DD',
-                  time_format: false,
-                  required: false,
-                  hint: 'Optional — only fill if you update the post later',
-                },
-                {
-                  label: 'Thumbnail',
-                  name: 'heroImage',
-                  widget: 'image',
-                  required: false,
-                  media_folder: '/public/blog',
-                  public_folder: '/blog',
-                  hint: 'Cover image shown on cards and at the top of the post',
-                },
-                {
-                  label: 'Tags',
-                  name: 'tags',
-                  widget: 'list',
-                  required: false,
-                  hint: 'e.g. AI, Building, Python',
-                },
-                {
-                  label: 'Body',
-                  name: 'body',
-                  widget: 'markdown',
-                },
+                { label: 'Title', name: 'title', widget: 'string' },
+                { label: 'Description', name: 'description', widget: 'string' },
+                { label: 'Publish Date', name: 'pubDate', widget: 'datetime', date_format: 'YYYY-MM-DD', time_format: false },
+                { label: 'Updated Date', name: 'updatedDate', widget: 'datetime', date_format: 'YYYY-MM-DD', time_format: false, required: false },
+                { label: 'Thumbnail', name: 'heroImage', widget: 'image', required: false, media_folder: '/public/blog', public_folder: '/blog' },
+                { label: 'Tags', name: 'tags', widget: 'list', required: false },
+                { label: 'Body', name: 'body', widget: 'markdown' },
               ],
             },
           ],
