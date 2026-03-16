@@ -1,8 +1,8 @@
 backend:
   name: github
-  repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME   # e.g. codereyinish/my-site
+  repo: codereyinish/my-site
   branch: main
-  base_url: https://YOUR_VERCEL_DOMAIN.vercel.app  # e.g. https://manishbista.vercel.app
+  base_url: https://my-site-gwgmbtkqo-manishs-projects-530c5920.vercel.app
   auth_endpoint: /api/auth
 
 media_folder: public/blog
