@@ -31,13 +31,21 @@
 
       const AUTH_KEY = 'decap-auth-token';
 
-      function dispatchAuthMsg(msg) {
-        authLog('→ dispatching message to CMS…');
+      function dispatchAuthMsg(successMsg) {
+        authLog('→ dispatching handshake + success to CMS…');
+        // Step 1: handshake — makes Decap CMS register its success listener
         window.dispatchEvent(new MessageEvent('message', {
-          data: msg,
+          data: 'authorizing:github',
           origin: window.location.origin,
         }));
-        authLog('✓ message dispatched');
+        // Step 2: success — now the listener is registered, send the token
+        setTimeout(() => {
+          window.dispatchEvent(new MessageEvent('message', {
+            data: successMsg,
+            origin: window.location.origin,
+          }));
+          authLog('✓ messages dispatched');
+        }, 50);
       }
 
       // A) Check localStorage on load (covers redirect-based flow where page reloaded)

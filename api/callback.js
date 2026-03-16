@@ -33,34 +33,42 @@ export default async function handler(req, res) {
     </body></html>`);
   }
 
-  const msg = `authorization:github:success:${JSON.stringify({ token: data.access_token, provider: 'github' })}`;
-  const msgJson = JSON.stringify(msg);
+  // Decap CMS netlify-auth.js requires a TWO-STEP handshake:
+  //   Step 1: popup sends  "authorizing:github"                   → parent registers success listener
+  //   Step 2: popup sends  "authorization:github:success:{...}"   → parent processes token
+  // Skipping step 1 means the success listener is never registered and the token is silently ignored.
+  const handshake = 'authorizing:github';
+  const success   = `authorization:github:success:${JSON.stringify({ token: data.access_token, provider: 'github' })}`;
 
-  // Store token in localStorage so the admin page can pick it up
-  // regardless of whether this runs in a popup or the main window.
+  const handshakeJson = JSON.stringify(handshake);
+  const successJson   = JSON.stringify(success);
+
+  // Store success msg so admin page can inject it on reload (Safari redirect fallback)
   res.send(`<!doctype html><html><body><script>
-    const msg = ${msgJson};
+    const handshake = ${handshakeJson};
+    const success   = ${successJson};
 
-    // Always store — admin page reads this on load or when window.open is called
-    try { localStorage.setItem('decap-auth-token', msg); } catch(e) {}
+    try { localStorage.setItem('decap-auth-token', success); } catch(e) {}
+
+    function send(target) {
+      // Step 1: handshake — makes parent register its success listener
+      target.postMessage(handshake, '*');
+      // Step 2: success — parent's now-registered listener processes the token
+      setTimeout(() => target.postMessage(success, '*'), 50);
+    }
 
     if (window.opener) {
-      // Chrome/Firefox: opener still alive, send directly
-      window.opener.postMessage(msg, '*');
-      window.close();
+      send(window.opener);
+      setTimeout(() => window.close(), 300);
     } else {
-      // Safari: opener killed after cross-origin navigation
-      // BroadcastChannel notifies the admin tab
+      // Safari: opener gone — use BroadcastChannel
       try {
         const bc = new BroadcastChannel('decap-auth');
-        bc.postMessage(msg);
-        bc.close();
+        bc.postMessage(handshake);
+        setTimeout(() => { bc.postMessage(success); bc.close(); }, 50);
       } catch(e) {}
 
       document.body.innerHTML = '<p style="font-family:sans-serif;padding:40px;color:#333">✓ Authenticated! Returning to CMS&hellip;</p>';
-
-      // Try to close this window; if it won't close (main-window redirect),
-      // navigate back to /admin where the stored token will be picked up.
       setTimeout(() => {
         window.close();
         setTimeout(() => { window.location.href = '/admin'; }, 400);
