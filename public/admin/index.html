@@ -6,6 +6,21 @@
     <meta name="robots" content="noindex" />
     <title>Content Manager</title>
     <script>window.CMS_MANUAL_INIT = true;</script>
+    <script>
+      // Safari fix: window.opener is killed after cross-origin OAuth redirect.
+      // BroadcastChannel lets the callback page talk directly to this page.
+      if ('BroadcastChannel' in window) {
+        const bc = new BroadcastChannel('decap-auth');
+        bc.onmessage = (e) => {
+          // Re-dispatch as a window message so Decap CMS picks it up normally.
+          window.dispatchEvent(new MessageEvent('message', {
+            data: e.data,
+            origin: window.location.origin,
+          }));
+          bc.close();
+        };
+      }
+    </script>
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
