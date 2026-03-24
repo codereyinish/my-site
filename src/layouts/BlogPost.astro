@@ -1,20 +1,25 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & {
+	headings?: MarkdownHeading[];
+	readTime?: string;
+};
 
-const { title, description, pubDate, updatedDate, heroImage, tags } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags, headings = [], readTime } = Astro.props;
+const tocHeadings = headings.filter(h => h.depth <= 3);
 const imgSeed = title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} image={coverImg} />
 	</head>
 	<body>
 		<Header />
@@ -35,6 +40,8 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 						{description && <p class="post-desc">{description}</p>}
 						<div class="post-meta mono">
 							<span><FormattedDate date={pubDate} /></span>
+							{readTime && <span class="meta-sep">·</span>}
+							{readTime && <span>{readTime}</span>}
 							{updatedDate && (
 								<span class="updated-note">Updated: <FormattedDate date={updatedDate} /></span>
 							)}
@@ -43,14 +50,25 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 				</div>
 			</div>
 
-			<!-- Prose -->
+			<!-- Prose + TOC -->
 			<div class="container">
-				<div class="prose-wrap animate-fadeInUp">
-					<div class="prose">
-						<slot />
-					</div>
+				<div class="content-layout animate-fadeInUp">
+					<div class="prose-wrap">
+						<div class="prose">
+							<slot />
+						</div>
 					<div class="post-footer">
 						<div class="post-footer-line"></div>
+						{tags && tags.length > 0 && (
+							<div class="post-footer-tags">
+								<span class="tags-label mono">Tags</span>
+								<div class="tags-list">
+									{tags.map(t => (
+										<a href={`/blog?tag=${encodeURIComponent(t)}`} class="footer-tag">{t}</a>
+									))}
+								</div>
+							</div>
+						)}
 						<div class="post-footer-nav">
 							<a href="/blog" class="back-link">
 								<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
@@ -58,6 +76,26 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 							</a>
 						</div>
 					</div>
+				</div>
+
+				<!-- TOC sidebar -->
+				{tocHeadings.length > 0 && (
+					<aside class="toc-sidebar">
+						<div class="toc-inner">
+							<p class="toc-label mono">On this page</p>
+							<nav class="toc-nav">
+								{tocHeadings.map(h => (
+									<a
+										href={`#${h.slug}`}
+										class={`toc-link toc-h${h.depth}`}
+										data-heading={h.slug}
+									>{h.text}</a>
+								))}
+							</nav>
+						</div>
+					</aside>
+				)}
+
 				</div>
 			</div>
 		</article>
@@ -85,9 +123,9 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 		inset: 0;
 		background: linear-gradient(
 			to bottom,
-			rgba(0,0,0,0.2) 0%,
-			rgba(0,0,0,0.6) 60%,
-			rgba(0,0,0,0.95) 100%
+			rgba(0,0,0,0.55) 0%,
+			rgba(0,0,0,0.75) 60%,
+			rgba(0,0,0,0.97) 100%
 		);
 	}
 	.cover-content {
@@ -147,16 +185,24 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 	}
 	.updated-note { color: rgba(255,255,255,0.3); }
 
-	/* Prose */
-	.prose-wrap {
-		max-width: 680px;
-		margin: 0 auto;
+	/* Content layout — prose + TOC side by side */
+	.content-layout {
+		display: flex;
+		gap: 64px;
+		align-items: flex-start;
 		padding: 72px 0 64px;
 	}
+
+	/* Prose */
+	.prose-wrap {
+		flex: 1;
+		min-width: 0;
+	}
 	.prose {
-		font-size: 1.13rem;
-		line-height: 1.9;
-		color: rgba(255,255,255,0.78);
+		font-family: 'Georgia', 'Charter', 'Cambria', serif;
+		font-size: 1.18rem;
+		line-height: 1.95;
+		color: var(--text-secondary);
 	}
 	.prose :global(h1) {
 		font-size: 2rem;
@@ -193,10 +239,10 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 		border-left: 3px solid var(--blue);
 		padding: 1rem 1.5rem;
 		margin: 2.5rem 0;
-		color: var(--text-secondary);
+		color: var(--text-muted);
 		font-style: italic;
 		font-size: 1.05em;
-		background: rgba(59,130,246,0.05);
+		background: var(--surface);
 		border-radius: 0 8px 8px 0;
 	}
 	/* Images */
@@ -267,6 +313,32 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 	/* Footer nav */
 	.post-footer { margin-top: 3rem; }
 	.post-footer-line { border-top: 1px solid var(--border); margin-bottom: 24px; }
+	.post-footer-tags {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 24px;
+		flex-wrap: wrap;
+	}
+	.tags-label {
+		font-size: 11px;
+		letter-spacing: 1.5px;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+	.tags-list { display: flex; gap: 8px; flex-wrap: wrap; }
+	.footer-tag {
+		font-family: var(--font-mono);
+		font-size: 11px;
+		letter-spacing: 0.5px;
+		text-transform: uppercase;
+		padding: 4px 12px;
+		border: 1px solid var(--border);
+		border-radius: 100px;
+		color: var(--text-secondary);
+		transition: border-color 0.2s, color 0.2s;
+	}
+	.footer-tag:hover { border-color: var(--border-light); color: var(--text); }
 	.post-footer-nav { display: flex; justify-content: space-between; align-items: center; }
 	.back-link {
 		display: inline-flex;
@@ -279,9 +351,75 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 	}
 	.back-link:hover { color: var(--text); }
 
+	/* TOC sidebar */
+	.toc-sidebar {
+		width: 200px;
+		flex-shrink: 0;
+	}
+	.toc-inner {
+		position: sticky;
+		top: 88px;
+	}
+	.toc-label {
+		font-size: 10px;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+		color: var(--text-muted);
+		margin-bottom: 12px;
+	}
+	.toc-nav {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+	.toc-link {
+		font-size: 12.5px;
+		line-height: 1.5;
+		color: var(--text-muted);
+		padding: 4px 0 4px 10px;
+		border-left: 1px solid var(--border);
+		transition: color 0.15s, border-color 0.15s;
+		text-decoration: none;
+		display: block;
+	}
+	.toc-link:hover { color: var(--text-secondary); }
+	.toc-link.active {
+		color: var(--text);
+		border-left-color: var(--blue);
+	}
+	.toc-h2 { padding-left: 10px; }
+	.toc-h3 { padding-left: 22px; font-size: 12px; }
+
+	@media (max-width: 1100px) {
+		.toc-sidebar { display: none; }
+	}
 	@media (max-width: 720px) {
 		.post-cover { min-height: 360px; }
 		.cover-content { padding: 40px 0 40px; }
-		.prose-wrap { padding: 40px 0 32px; }
+		.content-layout { padding: 40px 0 32px; }
 	}
 </style>
+
+<script>
+// Highlight the active TOC heading as you scroll
+const links = document.querySelectorAll<HTMLAnchorElement>('.toc-link');
+if (links.length) {
+	const headingEls = Array.from(links).map(l =>
+		document.getElementById(l.dataset.heading ?? '')
+	).filter(Boolean) as HTMLElement[];
+
+	const observer = new IntersectionObserver(entries => {
+		entries.forEach(entry => {
+			if (entry.isIntersecting) {
+				links.forEach(l => l.classList.remove('active'));
+				const active = document.querySelector<HTMLAnchorElement>(
+					`.toc-link[data-heading="${entry.target.id}"]`
+				);
+				active?.classList.add('active');
+			}
+		});
+	}, { rootMargin: '-10% 0px -80% 0px' });
+
+	headingEls.forEach(el => observer.observe(el));
+}
+</script>

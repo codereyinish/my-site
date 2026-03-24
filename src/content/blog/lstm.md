@@ -2,6 +2,8 @@
 title: "LSTM"
 description: "What actually is LSTM and how it differs from RNN network and how it can be used to identify human speech out of the background noise"
 pubDate: 2026-03-23
+heroImage: "/src/assets/blog/lstm-d0319ef7.png"
+tags: ["AI", "Python", "Neural Network"]
 ---
 ## What is LSTM?
 
@@ -154,7 +156,7 @@ Do we still use LSTM and CNN after TRANSFORMER is popular?
 
 —> yes for lightweight tasks
 
-![](/src/assets/blog/lstm-f15c80ab.png)
+![](/src/assets/blog/lstm-7bef463e.png)
 
 
 
@@ -162,7 +164,7 @@ Do we still use LSTM and CNN after TRANSFORMER is popular?
 
 Back to LSTM
 
-![](/src/assets/blog/lstm-6690bb67.png)
+![](/src/assets/blog/lstm-c1705cdd.png)
 
 
 
