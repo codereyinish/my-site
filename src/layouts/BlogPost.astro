@@ -185,17 +185,18 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 	}
 	.updated-note { color: rgba(255,255,255,0.3); }
 
-	/* Content layout — prose + TOC side by side */
+	/* Content layout — centered prose + TOC to the right */
 	.content-layout {
-		display: flex;
-		gap: 64px;
+		display: grid;
+		grid-template-columns: minmax(0, 720px) 220px;
+		justify-content: center;
+		gap: 0 64px;
 		align-items: flex-start;
 		padding: 72px 0 64px;
 	}
 
 	/* Prose */
 	.prose-wrap {
-		flex: 1;
 		min-width: 0;
 	}
 	.prose {
@@ -353,50 +354,55 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 
 	/* TOC sidebar */
 	.toc-sidebar {
-		width: 200px;
-		flex-shrink: 0;
+		min-width: 0;
 	}
 	.toc-inner {
 		position: sticky;
 		top: 88px;
 	}
 	.toc-label {
-		font-size: 10px;
-		letter-spacing: 2px;
+		font-family: var(--font-sans);
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 1.5px;
 		text-transform: uppercase;
 		color: var(--text-muted);
-		margin-bottom: 12px;
+		margin-bottom: 14px;
 	}
 	.toc-nav {
 		display: flex;
 		flex-direction: column;
-		gap: 2px;
+		gap: 1px;
 	}
 	.toc-link {
-		font-size: 12.5px;
-		line-height: 1.5;
+		font-family: var(--font-sans);
+		font-size: 13px;
+		font-weight: 400;
+		line-height: 1.55;
 		color: var(--text-muted);
-		padding: 4px 0 4px 10px;
-		border-left: 1px solid var(--border);
+		padding: 5px 0 5px 12px;
+		border-left: 2px solid var(--border);
 		transition: color 0.15s, border-color 0.15s;
 		text-decoration: none;
 		display: block;
 	}
-	.toc-link:hover { color: var(--text-secondary); }
+	.toc-link:hover { color: var(--text-secondary); border-left-color: var(--border-light); }
 	.toc-link.active {
 		color: var(--text);
 		border-left-color: var(--blue);
+		font-weight: 500;
 	}
-	.toc-h2 { padding-left: 10px; }
-	.toc-h3 { padding-left: 22px; font-size: 12px; }
+	.toc-h2 { padding-left: 12px; }
+	.toc-h3 { padding-left: 24px; font-size: 12.5px; color: var(--text-muted); }
 
 	@media (max-width: 1100px) {
 		.toc-sidebar { display: none; }
+		.content-layout { grid-template-columns: minmax(0, 720px); }
 	}
 	@media (max-width: 720px) {
 		.post-cover { min-height: 360px; }
 		.cover-content { padding: 40px 0 40px; }
-		.content-layout { padding: 40px 0 32px; }
+		.content-layout { padding: 40px 0 32px; grid-template-columns: 1fr; }
 	}
 </style>
 
