@@ -127,6 +127,18 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 				<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 			</a>
 		</div>
+
+		<!-- Code fullscreen modal -->
+		<div class="code-modal" id="code-modal">
+			<button class="code-modal-close" id="code-modal-close">×</button>
+			<pre id="code-modal-pre"></pre>
+		</div>
+
+		<!-- Image lightbox -->
+		<div class="img-lightbox" id="img-lightbox">
+			<button class="img-lightbox-close" id="img-lightbox-close">×</button>
+			<img id="img-lightbox-img" src="" alt="" />
+		</div>
 	</body>
 </html>
 
@@ -552,6 +564,139 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 	@media (max-width: 480px) {
 		.sub-popup { bottom: 16px; right: 16px; left: 16px; width: auto; }
 	}
+
+	/* Code block wrapper */
+	.code-block-wrap {
+		position: relative;
+	}
+	.code-block-wrap:hover .code-actions { opacity: 1; }
+	.code-actions {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		display: flex;
+		gap: 6px;
+		opacity: 0;
+		transition: opacity 0.2s;
+		z-index: 2;
+	}
+	.code-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		padding: 4px 10px;
+		background: rgba(255,255,255,0.08);
+		border: 1px solid rgba(255,255,255,0.12);
+		border-radius: 6px;
+		color: rgba(255,255,255,0.6);
+		font-family: var(--font-mono);
+		font-size: 11px;
+		cursor: pointer;
+		transition: background 0.15s, color 0.15s;
+		backdrop-filter: blur(4px);
+	}
+	.code-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+	.code-btn.copied { color: #4ade80; border-color: rgba(74,222,128,0.3); }
+
+	/* Code fullscreen modal */
+	.code-modal {
+		display: none;
+		position: fixed;
+		inset: 0;
+		z-index: 300;
+		background: rgba(0,0,0,0.92);
+		backdrop-filter: blur(8px);
+		padding: 48px 32px 32px;
+		overflow: auto;
+	}
+	.code-modal.open { display: block; }
+	.code-modal-close {
+		position: fixed;
+		top: 16px;
+		right: 20px;
+		background: none;
+		border: none;
+		color: rgba(255,255,255,0.5);
+		font-size: 28px;
+		cursor: pointer;
+		line-height: 1;
+		transition: color 0.2s;
+	}
+	.code-modal-close:hover { color: #fff; }
+	.code-modal pre {
+		max-width: 1100px;
+		margin: 0 auto;
+		background: #000 !important;
+		border-radius: 12px;
+		padding: 2rem;
+		border: 1px solid var(--border);
+		font-size: 0.95rem;
+		line-height: 1.7;
+	}
+
+	/* Image lightbox */
+	.prose :global(.img-wrap) {
+		position: relative;
+		display: block;
+		cursor: zoom-in;
+	}
+	.prose :global(.img-wrap::after) {
+		content: '+';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%) scale(0.6);
+		width: 40px;
+		height: 40px;
+		background: rgba(0,0,0,0.6);
+		border: 1.5px solid rgba(255,255,255,0.5);
+		border-radius: 50%;
+		color: #fff;
+		font-size: 22px;
+		font-weight: 300;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0;
+		transition: opacity 0.2s, transform 0.2s;
+		backdrop-filter: blur(4px);
+	}
+	.prose :global(.img-wrap:hover::after) {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+	.img-lightbox {
+		display: none;
+		position: fixed;
+		inset: 0;
+		z-index: 300;
+		background: rgba(0,0,0,0.92);
+		backdrop-filter: blur(8px);
+		align-items: center;
+		justify-content: center;
+		cursor: zoom-out;
+		padding: 32px;
+	}
+	.img-lightbox.open { display: flex; }
+	.img-lightbox img {
+		max-width: 100%;
+		max-height: 90vh;
+		border-radius: 8px;
+		box-shadow: 0 24px 80px rgba(0,0,0,0.8);
+		object-fit: contain;
+	}
+	.img-lightbox-close {
+		position: fixed;
+		top: 16px;
+		right: 20px;
+		background: none;
+		border: none;
+		color: rgba(255,255,255,0.5);
+		font-size: 28px;
+		cursor: pointer;
+		transition: color 0.2s;
+	}
+	.img-lightbox-close:hover { color: #fff; }
 </style>
 
 <script>
@@ -612,4 +757,75 @@ if (popup && !sessionStorage.getItem('sub-dismissed')) {
 	};
 	window.addEventListener('scroll', onScroll, { passive: true });
 }
+</script>
+
+<script>
+// ── Code blocks: copy + expand ──────────────────────────────
+const codeModal = document.getElementById('code-modal') as HTMLElement;
+const codeModalPre = document.getElementById('code-modal-pre') as HTMLElement;
+document.getElementById('code-modal-close')?.addEventListener('click', () => codeModal.classList.remove('open'));
+codeModal?.addEventListener('click', (e) => { if (e.target === codeModal) codeModal.classList.remove('open'); });
+
+document.querySelectorAll<HTMLElement>('.prose pre').forEach(pre => {
+	// Wrap in relative container
+	const wrap = document.createElement('div');
+	wrap.className = 'code-block-wrap';
+	pre.parentNode!.insertBefore(wrap, pre);
+	wrap.appendChild(pre);
+
+	// Actions bar
+	const actions = document.createElement('div');
+	actions.className = 'code-actions';
+
+	// Copy button
+	const copyBtn = document.createElement('button');
+	copyBtn.className = 'code-btn';
+	copyBtn.innerHTML = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy`;
+	copyBtn.addEventListener('click', async () => {
+		const code = pre.querySelector('code')?.innerText ?? pre.innerText;
+		await navigator.clipboard.writeText(code);
+		copyBtn.textContent = 'Copied!';
+		copyBtn.classList.add('copied');
+		setTimeout(() => { copyBtn.innerHTML = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy`; copyBtn.classList.remove('copied'); }, 2000);
+	});
+
+	// Expand button
+	const expandBtn = document.createElement('button');
+	expandBtn.className = 'code-btn';
+	expandBtn.innerHTML = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg> Expand`;
+	expandBtn.addEventListener('click', () => {
+		codeModalPre.innerHTML = pre.innerHTML;
+		codeModal.classList.add('open');
+	});
+
+	actions.appendChild(copyBtn);
+	actions.appendChild(expandBtn);
+	wrap.appendChild(actions);
+});
+
+// Close code modal on Escape
+document.addEventListener('keydown', (e) => {
+	if (e.key === 'Escape') {
+		codeModal?.classList.remove('open');
+		imgLightbox?.classList.remove('open');
+	}
+});
+
+// ── Image lightbox ───────────────────────────────────────────
+const imgLightbox = document.getElementById('img-lightbox') as HTMLElement;
+const imgLightboxImg = document.getElementById('img-lightbox-img') as HTMLImageElement;
+document.getElementById('img-lightbox-close')?.addEventListener('click', () => imgLightbox.classList.remove('open'));
+imgLightbox?.addEventListener('click', (e) => { if (e.target === imgLightbox) imgLightbox.classList.remove('open'); });
+
+document.querySelectorAll<HTMLImageElement>('.prose img').forEach(img => {
+	const wrap = document.createElement('span');
+	wrap.className = 'img-wrap';
+	img.parentNode!.insertBefore(wrap, img);
+	wrap.appendChild(img);
+	wrap.addEventListener('click', () => {
+		imgLightboxImg.src = img.src;
+		imgLightboxImg.alt = img.alt;
+		imgLightbox.classList.add('open');
+	});
+});
 </script>
