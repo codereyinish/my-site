@@ -70,24 +70,31 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 	/* Cover */
 	.post-cover {
 		position: relative;
-		min-height: 480px;
+		min-height: 520px;
 		display: flex;
 		align-items: flex-end;
 		background-size: cover;
 		background-position: center;
 		background-color: var(--surface);
+		/* Gradient fallback when no image */
+		background-image: linear-gradient(135deg, #0a0a0a 0%, #111827 50%, #0a0a0a 100%);
 		padding-top: 80px;
 	}
 	.cover-overlay {
 		position: absolute;
 		inset: 0;
-		background: linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.88) 100%);
+		background: linear-gradient(
+			to bottom,
+			rgba(0,0,0,0.2) 0%,
+			rgba(0,0,0,0.6) 60%,
+			rgba(0,0,0,0.95) 100%
+		);
 	}
 	.cover-content {
 		position: relative;
 		z-index: 2;
-		padding: 60px 0 56px;
-		max-width: 760px;
+		padding: 64px 0 60px;
+		max-width: 680px;
 	}
 	.back-crumb {
 		display: inline-block;
@@ -142,106 +149,116 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 
 	/* Prose */
 	.prose-wrap {
-		max-width: 720px;
-		padding: 64px 0 48px;
+		max-width: 680px;
+		margin: 0 auto;
+		padding: 72px 0 64px;
 	}
 	.prose {
-		font-size: 1.08rem;
-		line-height: 1.85;
-		color: rgba(255,255,255,0.82);
+		font-size: 1.13rem;
+		line-height: 1.9;
+		color: rgba(255,255,255,0.78);
 	}
-	.prose :global(h2) {
-		font-family: var(--font-sans);
-		font-size: 1.65rem;
-		font-weight: 700;
+	.prose :global(h1) {
+		font-size: 2rem;
+		font-weight: 800;
 		letter-spacing: -0.5px;
 		color: var(--text);
-		margin: 2.5rem 0 0.75rem;
+		margin: 3rem 0 1rem;
+	}
+	.prose :global(h2) {
+		font-size: 1.55rem;
+		font-weight: 700;
+		letter-spacing: -0.4px;
+		color: var(--text);
+		margin: 3rem 0 0.85rem;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid var(--border);
 	}
 	.prose :global(h3) {
-		font-family: var(--font-sans);
-		font-size: 1.25rem;
+		font-size: 1.2rem;
 		font-weight: 600;
 		color: var(--text);
-		margin: 2rem 0 0.5rem;
+		margin: 2.25rem 0 0.6rem;
 	}
-	.prose :global(p) { margin-bottom: 1.65em; }
+	.prose :global(p) { margin-bottom: 1.75em; }
 	.prose :global(a) {
 		color: var(--blue);
 		border-bottom: 1px solid rgba(59,130,246,0.3);
 		transition: border-color 0.2s;
 	}
 	.prose :global(a:hover) { border-color: var(--blue); opacity: 0.85; }
-	.prose :global(ul), .prose :global(ol) { padding-left: 1.5rem; margin-bottom: 1.5em; }
-	.prose :global(li) { margin-bottom: 0.4em; }
+	.prose :global(ul), .prose :global(ol) { padding-left: 1.75rem; margin-bottom: 1.75em; }
+	.prose :global(li) { margin-bottom: 0.5em; line-height: 1.75; }
 	.prose :global(blockquote) {
-		border-left: 2px solid var(--blue);
-		padding: 1rem 0 1rem 1.5rem;
-		margin: 2rem 0;
+		border-left: 3px solid var(--blue);
+		padding: 1rem 1.5rem;
+		margin: 2.5rem 0;
 		color: var(--text-secondary);
 		font-style: italic;
 		font-size: 1.05em;
-		background: var(--surface);
+		background: rgba(59,130,246,0.05);
 		border-radius: 0 8px 8px 0;
 	}
-	/* Images in post body */
+	/* Images */
 	.prose :global(img) {
 		width: 100%;
 		border-radius: 12px;
-		margin: 1.5rem 0;
+		margin: 2rem 0;
 		border: 1px solid var(--border);
 		display: block;
 	}
-	/* Video embeds — wrap any iframe in a div for responsive ratio */
+	/* Video / iframe */
 	.prose :global(iframe) {
 		width: 100%;
 		aspect-ratio: 16/9;
 		border-radius: 12px;
 		border: 1px solid var(--border);
-		margin: 1.5rem 0;
+		margin: 2rem 0;
 		display: block;
 	}
-	/* Native video */
 	.prose :global(video) {
 		width: 100%;
 		border-radius: 12px;
-		margin: 1.5rem 0;
+		margin: 2rem 0;
 		border: 1px solid var(--border);
 		display: block;
 	}
+	/* Inline code */
 	.prose :global(code) {
 		font-family: var(--font-mono);
-		font-size: 0.88em;
-		background: var(--surface2);
-		border: 1px solid var(--border);
-		padding: 2px 6px;
+		font-size: 0.85em;
+		background: rgba(6,182,212,0.08);
+		border: 1px solid rgba(6,182,212,0.2);
+		padding: 2px 7px;
 		border-radius: 4px;
 		color: var(--cyan);
 	}
+	/* Code blocks — Shiki wraps in <pre><code> */
 	.prose :global(pre) {
-		background: var(--surface2);
-		border: 1px solid var(--border);
-		border-radius: 10px;
-		padding: 1.25rem 1.5rem;
+		border-radius: 12px;
+		padding: 1.5rem 1.75rem;
 		overflow-x: auto;
-		margin: 1.5rem 0;
+		margin: 2rem 0;
+		border: 1px solid var(--border);
+		font-size: 0.9rem;
+		line-height: 1.65;
 	}
 	.prose :global(pre code) {
 		background: none;
 		border: none;
 		padding: 0;
-		font-size: 0.9em;
-		color: var(--text-secondary);
+		color: inherit;
+		font-size: inherit;
 	}
-	.prose :global(hr) { margin: 3rem 0; border-color: var(--border); }
+	.prose :global(hr) { margin: 3.5rem 0; border-color: var(--border); }
 	.prose :global(table) {
 		width: 100%;
 		border-collapse: collapse;
-		margin: 1.5rem 0;
+		margin: 2rem 0;
 		font-size: 0.95em;
 	}
 	.prose :global(th), .prose :global(td) {
-		padding: 10px 14px;
+		padding: 10px 16px;
 		border: 1px solid var(--border);
 		text-align: left;
 	}
