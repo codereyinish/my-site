@@ -30,7 +30,7 @@ if (!NOTION_API_KEY || !NOTION_DATABASE_ID) {
 }
 
 const OUT_DIR    = new URL('../src/content/blog/', import.meta.url).pathname;
-const IMAGES_DIR = new URL('../src/assets/blog/', import.meta.url).pathname;
+const IMAGES_DIR = new URL('../public/images/blog/', import.meta.url).pathname;
 
 fs.mkdirSync(OUT_DIR, { recursive: true });
 fs.mkdirSync(IMAGES_DIR, { recursive: true });
@@ -60,7 +60,7 @@ async function downloadImage(remoteUrl, slug) {
   const localPath = path.join(IMAGES_DIR, filename);
 
   if (fs.existsSync(localPath)) {
-    return `/src/assets/blog/${filename}`;
+    return `/images/blog/${filename}`;
   }
 
   await new Promise((resolve, reject) => {
@@ -82,7 +82,7 @@ async function downloadImage(remoteUrl, slug) {
     });
   });
 
-  return `/src/assets/blog/${filename}`;
+  return `/images/blog/${filename}`;
 }
 
 /** Extract plain text from a Notion rich-text array. */
