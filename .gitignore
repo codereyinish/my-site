@@ -20,5 +20,10 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
+# Notion-synced content (generated at build time by Vercel)
+src/content/blog/*.md
+src/content/blog/*.mdx
+src/assets/blog/
+
 # jetbrains setting folder
 .idea/
