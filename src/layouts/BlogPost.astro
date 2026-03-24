@@ -575,6 +575,13 @@ if (links.length) {
 
 	headingEls.forEach(el => observer.observe(el));
 }
+
+// Push prose down so it starts below the TOC
+const tocInner = document.querySelector<HTMLElement>('.toc-inner');
+const proseWrap = document.querySelector<HTMLElement>('.prose-wrap');
+if (tocInner && proseWrap) {
+	proseWrap.style.paddingTop = tocInner.offsetHeight + 40 + 'px';
+}
 </script>
 
 <script>
