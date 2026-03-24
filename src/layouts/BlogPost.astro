@@ -69,6 +69,18 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 								</div>
 							</div>
 						)}
+						<!-- Subscribe banner -->
+						<div class="subscribe-banner">
+							<div class="subscribe-banner-text">
+								<p class="subscribe-banner-title">Enjoyed this post?</p>
+								<p class="subscribe-banner-sub">Get new essays straight to your inbox. No spam, unsubscribe anytime.</p>
+							</div>
+							<a href="https://mbista.beehiiv.com/subscribe" target="_blank" rel="noopener" class="subscribe-btn">
+								Subscribe
+								<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+							</a>
+						</div>
+
 						<div class="post-footer-nav">
 							<a href="/blog" class="back-link">
 								<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
@@ -101,6 +113,20 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 		</article>
 
 		<Footer />
+
+		<!-- Subscribe popup -->
+		<div class="sub-popup" id="sub-popup" aria-hidden="true">
+			<button class="sub-popup-close" id="sub-popup-close" aria-label="Close">
+				<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+			</button>
+			<p class="sub-popup-eyebrow mono">Newsletter</p>
+			<p class="sub-popup-title">Stay in the loop</p>
+			<p class="sub-popup-sub">Get new essays straight to your inbox. No spam, unsubscribe anytime.</p>
+			<a href="https://mbista.beehiiv.com/subscribe" target="_blank" rel="noopener" class="sub-popup-btn">
+				Subscribe on Beehiiv
+				<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+			</a>
+		</div>
 	</body>
 </html>
 
@@ -404,6 +430,123 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 		.cover-content { padding: 40px 0 40px; }
 		.content-layout { padding: 40px 0 32px; grid-template-columns: 1fr; }
 	}
+
+	/* Subscribe banner (inline at end of post) */
+	.subscribe-banner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 24px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 16px;
+		padding: 28px 32px;
+		margin: 48px 0 32px;
+	}
+	.subscribe-banner-title {
+		font-size: 1rem;
+		font-weight: 700;
+		color: var(--text);
+		margin-bottom: 4px;
+	}
+	.subscribe-banner-sub {
+		font-size: 13px;
+		color: var(--text-muted);
+		margin: 0;
+		line-height: 1.5;
+	}
+	.subscribe-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 22px;
+		background: var(--text);
+		color: var(--bg);
+		border-radius: 8px;
+		font-size: 13px;
+		font-weight: 600;
+		white-space: nowrap;
+		flex-shrink: 0;
+		transition: opacity 0.2s;
+	}
+	.subscribe-btn:hover { opacity: 0.85; }
+	@media (max-width: 600px) {
+		.subscribe-banner { flex-direction: column; align-items: flex-start; }
+	}
+
+	/* Subscribe popup */
+	.sub-popup {
+		position: fixed;
+		bottom: 32px;
+		right: 32px;
+		width: 300px;
+		background: var(--surface2);
+		border: 1px solid var(--border-light);
+		border-radius: 16px;
+		padding: 28px 28px 24px;
+		z-index: 200;
+		box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+		transform: translateY(20px);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.35s ease, transform 0.35s ease;
+	}
+	.sub-popup.visible {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
+	}
+	.sub-popup-close {
+		position: absolute;
+		top: 14px;
+		right: 14px;
+		background: none;
+		border: none;
+		color: var(--text-muted);
+		cursor: pointer;
+		padding: 4px;
+		line-height: 1;
+		transition: color 0.2s;
+	}
+	.sub-popup-close:hover { color: var(--text); }
+	.sub-popup-eyebrow {
+		font-size: 10px;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+		color: var(--blue);
+		margin-bottom: 8px;
+	}
+	.sub-popup-title {
+		font-size: 1.1rem;
+		font-weight: 700;
+		color: var(--text);
+		margin-bottom: 8px;
+		letter-spacing: -0.3px;
+	}
+	.sub-popup-sub {
+		font-size: 13px;
+		color: var(--text-muted);
+		line-height: 1.55;
+		margin-bottom: 20px;
+	}
+	.sub-popup-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		width: 100%;
+		padding: 11px 0;
+		background: var(--text);
+		color: var(--bg);
+		border-radius: 8px;
+		font-size: 13px;
+		font-weight: 600;
+		transition: opacity 0.2s;
+	}
+	.sub-popup-btn:hover { opacity: 0.85; }
+	@media (max-width: 480px) {
+		.sub-popup { bottom: 16px; right: 16px; left: 16px; width: auto; }
+	}
 </style>
 
 <script>
@@ -427,5 +570,39 @@ if (links.length) {
 	}, { rootMargin: '-10% 0px -80% 0px' });
 
 	headingEls.forEach(el => observer.observe(el));
+}
+</script>
+
+<script>
+// Subscribe popup — shows when user scrolls past 80% of article, once per session
+const popup = document.getElementById('sub-popup');
+const closeBtn = document.getElementById('sub-popup-close');
+
+if (popup && !sessionStorage.getItem('sub-dismissed')) {
+	const show = () => {
+		popup.classList.add('visible');
+		popup.setAttribute('aria-hidden', 'false');
+	};
+
+	const dismiss = () => {
+		popup.classList.remove('visible');
+		popup.setAttribute('aria-hidden', 'true');
+		sessionStorage.setItem('sub-dismissed', '1');
+	};
+
+	closeBtn?.addEventListener('click', dismiss);
+
+	// Show after scrolling 80% through the article
+	const article = document.querySelector('.post-article') as HTMLElement;
+	const onScroll = () => {
+		if (!article) return;
+		const { top, height } = article.getBoundingClientRect();
+		const scrolled = (window.innerHeight - top) / height;
+		if (scrolled > 0.8) {
+			show();
+			window.removeEventListener('scroll', onScroll);
+		}
+	};
+	window.addEventListener('scroll', onScroll, { passive: true });
 }
 </script>
