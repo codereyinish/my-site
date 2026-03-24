@@ -214,15 +214,16 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 	/* Content layout — centered prose + TOC to the right */
 	.content-layout {
 		display: grid;
-		grid-template-columns: minmax(0, 720px) 220px;
+		grid-template-columns: 220px minmax(0, 680px) 220px;
 		justify-content: center;
-		gap: 0 64px;
+		gap: 0 56px;
 		align-items: flex-start;
 		padding: 72px 0 64px;
 	}
 
 	/* Prose */
 	.prose-wrap {
+		grid-column: 2;
 		min-width: 0;
 	}
 	.prose {
@@ -380,6 +381,8 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 
 	/* TOC sidebar */
 	.toc-sidebar {
+		grid-column: 1;
+		grid-row: 1;
 		min-width: 0;
 	}
 	.toc-inner {
@@ -423,7 +426,8 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 
 	@media (max-width: 1100px) {
 		.toc-sidebar { display: none; }
-		.content-layout { grid-template-columns: minmax(0, 720px); }
+		.content-layout { grid-template-columns: minmax(0, 680px); justify-content: center; }
+		.prose-wrap { grid-column: 1; }
 	}
 	@media (max-width: 720px) {
 		.post-cover { min-height: 360px; }
