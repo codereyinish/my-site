@@ -10,7 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "notion:sync": "node --env-file=.env scripts/fetch-notion.mjs"
+    "notion:sync": "node scripts/fetch-notion.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.0",
