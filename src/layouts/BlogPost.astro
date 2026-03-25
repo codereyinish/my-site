@@ -686,7 +686,7 @@ const coverImg = heroImage ?? null;
 	/* Related posts */
 	.related-section {
 		border-top: 1px solid var(--border);
-		padding: 24px 0 40px;
+		padding: 16px 0 40px;
 	}
 	.related-inner {
 		display: grid;
@@ -707,7 +707,7 @@ const coverImg = heroImage ?? null;
 	}
 	.related-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 		gap: 12px;
 	}
 	.related-card {
