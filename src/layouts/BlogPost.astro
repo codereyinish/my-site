@@ -293,6 +293,10 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 		border: 1px solid var(--border);
 		display: block;
 	}
+	/* Caption-based size control: add "small", "medium", or "full" as caption in Notion */
+	.prose :global(img.img-small)  { width: 40%; margin-left: auto; margin-right: auto; }
+	.prose :global(img.img-medium) { width: 65%; margin-left: auto; margin-right: auto; }
+	.prose :global(img.img-full)   { width: 100%; }
 	/* Video / iframe */
 	.prose :global(iframe) {
 		width: 100%;

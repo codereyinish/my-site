@@ -185,11 +185,15 @@ async function blocksToMarkdown(blocks, slug, indent = '') {
       case 'image': {
         const url = data.type === 'file' ? data.file.url : data.external.url;
         const caption = richText(data.caption) || '';
+        const sizeClass = ['small', 'medium', 'full'].includes(caption.toLowerCase())
+          ? `img-${caption.toLowerCase()}` : '';
         try {
           const local = await downloadImage(url, slug);
-          lines.push(`![${caption}](${local})`);
+          if (sizeClass) lines.push(`<img src="${local}" class="${sizeClass}" alt="" />`);
+          else lines.push(`![${caption}](${local})`);
         } catch {
-          lines.push(`![${caption}](${url})`);
+          if (sizeClass) lines.push(`<img src="${url}" class="${sizeClass}" alt="" />`);
+          else lines.push(`![${caption}](${url})`);
         }
         break;
       }
