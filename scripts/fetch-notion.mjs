@@ -260,6 +260,11 @@ async function main() {
       page.cover?.external?.url ??
       null;
 
+    const thumbnailUrl =
+      props.Thumbnail?.files?.[0]?.file?.url ??
+      props.Thumbnail?.files?.[0]?.external?.url ??
+      null;
+
     if (!title) {
       console.warn(`  Skipping page ${page.id}: no title found.`);
       continue;
@@ -275,6 +280,13 @@ async function main() {
       catch (err) { console.warn(`  Warning: hero image failed: ${err.message}`); }
     }
 
+    // Download thumbnail (separate card image, optional)
+    let thumbnail;
+    if (thumbnailUrl) {
+      try { thumbnail = await downloadImage(thumbnailUrl, `${slug}-thumb`); }
+      catch (err) { console.warn(`  Warning: thumbnail failed: ${err.message}`); }
+    }
+
     // Fetch and convert page content
     const blocks = await getBlocks(page.id);
     const body   = await blocksToMarkdown(blocks, slug);
@@ -288,6 +300,7 @@ async function main() {
     ];
     if (updatedDate) fm.push(`updatedDate: ${updatedDate}`);
     if (heroImage)   fm.push(`heroImage: ${JSON.stringify(heroImage)}`);
+    if (thumbnail)   fm.push(`thumbnail: ${JSON.stringify(thumbnail)}`);
     if (tags.length) fm.push(`tags: [${tags.map(t => JSON.stringify(t)).join(', ')}]`);
     fm.push('---', '');
 
