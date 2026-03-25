@@ -20,6 +20,15 @@ import { createHash } from 'node:crypto';
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
+// Load .env if present (local dev). On Vercel, env vars are injected directly.
+if (fs.existsSync(new URL('../.env', import.meta.url).pathname)) {
+  const envFile = fs.readFileSync(new URL('../.env', import.meta.url).pathname, 'utf8');
+  for (const line of envFile.split('\n')) {
+    const match = line.match(/^\s*([^#=\s]+)\s*=\s*(.*)\s*$/);
+    if (match) process.env[match[1]] = match[2].replace(/^['"]|['"]$/g, '');
+  }
+}
+
 const NOTION_API_KEY     = process.env.NOTION_API_KEY;
 const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID;
 

@@ -363,7 +363,7 @@ const aimlBadges  = ['OpenAI API', 'Whisper', 'RAG', 'Fine-tuning', 'Jupyter', '
 							return (
 								<a href={`/blog/${post.id}/`} class="blog-card" style={`--accent:${accent}`}>
 									<div class="blog-card-img-wrap">
-										<div class="blog-card-img" style={`background-image:url('${post.data.heroImage ?? `https://picsum.photos/seed/${post.id}-sketch/800/500`}')`}></div>
+										<div class="blog-card-img" style={post.data.heroImage ? `background-image:url('${post.data.heroImage}')` : ''}></div>
 										<div class="blog-card-sketch"></div>
 										<div class="blog-card-accent"></div>
 									</div>

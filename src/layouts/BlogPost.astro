@@ -13,8 +13,7 @@ type Props = CollectionEntry<'blog'>['data'] & {
 
 const { title, description, pubDate, updatedDate, heroImage, tags, headings = [], readTime } = Astro.props;
 const tocHeadings = headings.filter(h => h.depth <= 3);
-const imgSeed = title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
+const coverImg = heroImage ?? null;
 ---
 
 <html lang="en">
@@ -26,7 +25,7 @@ const coverImg = heroImage ?? `https://picsum.photos/seed/${imgSeed}/1600/700`;
 
 		<article class="post-article">
 			<!-- Hero cover -->
-			<div class="post-cover" style={`background-image:url('${coverImg}')`}>
+			<div class="post-cover" style={coverImg ? `background-image:url('${coverImg}')` : ''}>
 				<div class="cover-overlay"></div>
 				<div class="container">
 					<div class="cover-content animate-fadeInDown">
