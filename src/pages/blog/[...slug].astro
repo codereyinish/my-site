@@ -6,19 +6,29 @@ export async function getStaticPaths() {
 	const posts = await getCollection('blog');
 	return posts.map((post) => ({
 		params: { slug: post.id },
-		props: post,
+		props: { post, allPosts: posts },
 	}));
 }
-type Props = CollectionEntry<'blog'>;
 
-const post = Astro.props;
+const { post, allPosts } = Astro.props as { post: CollectionEntry<'blog'>, allPosts: CollectionEntry<'blog'>[] };
 const { Content, headings } = await render(post);
 
 // Reading time — ~200 words per minute
 const wordCount = post.body?.trim().split(/\s+/).length ?? 0;
 const readTime = `${Math.max(1, Math.ceil(wordCount / 200))} min read`;
+
+// Related posts — same tags, sorted by most overlap, max 3
+const postTags = post.data.tags ?? [];
+const related = allPosts
+	.filter(p => p.id !== post.id && (p.data.tags ?? []).some(t => postTags.includes(t)))
+	.sort((a, b) => {
+		const aScore = (a.data.tags ?? []).filter(t => postTags.includes(t)).length;
+		const bScore = (b.data.tags ?? []).filter(t => postTags.includes(t)).length;
+		return bScore - aScore;
+	})
+	.slice(0, 3);
 ---
 
-<BlogPost {...post.data} headings={headings} readTime={readTime}>
+<BlogPost {...post.data} headings={headings} readTime={readTime} relatedPosts={related}>
 	<Content />
 </BlogPost>

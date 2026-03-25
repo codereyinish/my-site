@@ -9,9 +9,10 @@ import Header from '../components/Header.astro';
 type Props = CollectionEntry<'blog'>['data'] & {
 	headings?: MarkdownHeading[];
 	readTime?: string;
+	relatedPosts?: CollectionEntry<'blog'>[];
 };
 
-const { title, description, pubDate, updatedDate, heroImage, tags, headings = [], readTime } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags, headings = [], readTime, relatedPosts = [] } = Astro.props;
 const tocHeadings = headings.filter(h => h.depth <= 3);
 const coverImg = heroImage ?? null;
 ---
@@ -21,6 +22,9 @@ const coverImg = heroImage ?? null;
 		<BaseHead title={title} description={description} image={coverImg} />
 	</head>
 	<body>
+		<!-- Reading progress bar -->
+		<div id="progress-bar"></div>
+
 		<Header />
 
 		<article class="post-article">
@@ -110,6 +114,30 @@ const coverImg = heroImage ?? null;
 				</div>
 			</div>
 		</article>
+
+		{relatedPosts.length > 0 && (
+			<section class="related-section">
+				<div class="related-inner">
+					<p class="related-label mono">Related posts</p>
+					<div class="related-grid">
+						{relatedPosts.map(p => (
+							<a href={`/blog/${p.id}/`} class="related-card">
+								{(p.data.thumbnail ?? p.data.heroImage) && (
+									<div class="related-img" style={`background-image:url('${p.data.thumbnail ?? p.data.heroImage}')`}></div>
+								)}
+								<div class="related-body">
+									<div class="related-tags">
+										{(p.data.tags ?? []).slice(0, 2).map(t => <span class="related-tag">{t}</span>)}
+									</div>
+									<p class="related-title">{p.data.title}</p>
+									<p class="related-date mono"><FormattedDate date={p.data.pubDate} /></p>
+								</div>
+							</a>
+						))}
+					</div>
+				</div>
+			</section>
+		)}
 
 		<Footer />
 
@@ -640,6 +668,84 @@ const coverImg = heroImage ?? null;
 		transition: color 0.2s;
 	}
 	.img-lightbox-close:hover { color: #fff; }
+
+	/* Reading progress bar */
+	#progress-bar {
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 2px;
+		width: 0%;
+		background: var(--blue);
+		z-index: 1000;
+		transition: width 0.1s linear;
+	}
+
+	/* Related posts */
+	.related-section {
+		border-top: 1px solid var(--border);
+		padding: 56px 0 64px;
+	}
+	.related-inner {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 64px;
+	}
+	.related-label {
+		font-size: 11px;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+		color: var(--text-muted);
+		margin-bottom: 24px;
+	}
+	.related-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+	}
+	.related-card {
+		display: flex;
+		flex-direction: column;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		overflow: hidden;
+		text-decoration: none;
+		transition: border-color 0.2s, transform 0.2s;
+	}
+	.related-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+	.related-img {
+		width: 100%;
+		aspect-ratio: 16/9;
+		background-size: cover;
+		background-position: center;
+		background-color: var(--surface2);
+	}
+	.related-body { padding: 14px 16px 16px; }
+	.related-tags { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+	.related-tag {
+		font-family: var(--font-mono);
+		font-size: 10px;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		color: var(--text-muted);
+		border: 1px solid var(--border);
+		border-radius: 4px;
+		padding: 2px 7px;
+	}
+	.related-title {
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: var(--text);
+		line-height: 1.4;
+		margin-bottom: 8px;
+	}
+	.related-date { font-size: 11px; color: var(--text-muted); letter-spacing: 0.3px; }
+	@media (max-width: 900px) { .related-grid { grid-template-columns: repeat(2, 1fr); } }
+	@media (max-width: 600px) {
+		.related-grid { grid-template-columns: 1fr; }
+		.related-inner { padding: 0 20px; }
+	}
 </style>
 
 <script>
@@ -771,6 +877,22 @@ document.querySelectorAll<HTMLImageElement>('.prose img').forEach(img => {
 		imgLightbox.classList.add('open');
 	});
 });
+</script>
+
+<script>
+// Reading progress bar
+const bar = document.getElementById('progress-bar');
+if (bar) {
+	const update = () => {
+		const article = document.querySelector('.post-article') as HTMLElement;
+		if (!article) return;
+		const { top, height } = article.getBoundingClientRect();
+		const pct = Math.min(100, Math.max(0, (-top / (height - window.innerHeight)) * 100));
+		bar.style.width = pct + '%';
+	};
+	window.addEventListener('scroll', update, { passive: true });
+	update();
+}
 </script>
 
 <style is:global>
