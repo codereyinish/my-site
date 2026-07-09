@@ -15,6 +15,7 @@
 	--font-sans:   'Outfit', system-ui, sans-serif;
 	--font-mono:   'IBM Plex Mono', 'Courier New', monospace;
 	--header-bg:   rgba(0, 0, 0, 0.7);
+	--glass:       rgba(8, 8, 8, 0.75);
 	/* Diagonal stripe pattern used as decorative borders */
 	--stripe-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2' stroke='%23262626' stroke-width='0.8'/%3E%3C/svg%3E");
 }
@@ -22,18 +23,19 @@
 /* Light theme — overrides the palette; every surface/text uses these vars */
 html[data-theme="light"] {
 	--bg:          #ffffff;
-	--surface:     #f7f7f8;
-	--surface2:    #ececee;
-	--border:      #e4e4e7;
-	--border-light: #d4d4d8;
+	--surface:     #f6f6f8;
+	--surface2:    #ebebee;
+	--border:      #c2c5cd;
+	--border-light: #9ea3ad;
 	--text:        #18181b;
-	--text-secondary: #52525b;
-	--text-muted:  #71717a;
+	--text-secondary: #4b4b52;
+	--text-muted:  #6b6b73;
 	--blue:        #2563eb;
 	--blue-dim:    rgba(37,99,235,0.10);
 	--cyan:        #0e7490;
 	--indigo:      #4f46e5;
-	--header-bg:   rgba(255, 255, 255, 0.78);
+	--header-bg:   rgba(255, 255, 255, 0.82);
+	--glass:       rgba(255, 255, 255, 0.75);
 	--stripe-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2' stroke='%23d4d4d8' stroke-width='0.8'/%3E%3C/svg%3E");
 }
 /* Soften the dark grain overlay on light backgrounds */
