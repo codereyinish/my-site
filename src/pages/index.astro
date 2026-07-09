@@ -5,6 +5,8 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import FlowDiagram from '../components/FlowDiagram.astro';
+import ClassRecDemo from '../components/ClassRecDemo.astro';
+import MBGPTDemo from '../components/MBGPTDemo.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { TECH_ICONS } from '../lib/techIcons';
 
@@ -248,35 +250,7 @@ const aimlBadges  = ['OpenAI API', 'Whisper', 'RAG', 'Fine-tuning', 'Jupyter', '
 								<span class="tech-tag" style="--tc:#22c55e"><Fragment set:html={TECH_ICONS['WebSockets']} />WebSockets</span>
 							</div>
 						</div>
-						<!-- Animated browser mockup -->
-						<div class="project-demo">
-							<div class="demo-chrome">
-								<span class="chrome-dot" style="background:#ff5f56"></span>
-								<span class="chrome-dot" style="background:#febc2e"></span>
-								<span class="chrome-dot" style="background:#28c840"></span>
-								<span class="chrome-url mono">classrec.app</span>
-							</div>
-							<div class="demo-screen classrec-screen">
-								<div class="cr-header">
-									<div class="cr-title">Live Transcript</div>
-									<span class="cr-live"><span class="live-dot"></span>REC</span>
-								</div>
-								<div class="cr-lines">
-									<div class="cr-line cr-line-1">Professor: "Today we're covering neural networks..."</div>
-									<div class="cr-line cr-line-2">The architecture consists of layers...</div>
-									<div class="cr-line cr-line-3">Each neuron receives inputs weighted by...</div>
-									<div class="cr-line cr-line-4 cr-typing">Backpropagation adjusts these weights<span class="cursor">|</span></div>
-								</div>
-								<div class="cr-bar">
-									<div class="cr-waveform">
-										{Array.from({length: 20}).map((_, i) => (
-											<span class="wave-bar" style={`animation-delay:${i * 0.08}s`}></span>
-										))}
-									</div>
-									<span class="cr-timer mono">12:34</span>
-								</div>
-							</div>
-						</div>
+						<ClassRecDemo />
 					</article>
 
 					<div class="section-divider"></div>
@@ -306,37 +280,7 @@ const aimlBadges  = ['OpenAI API', 'Whisper', 'RAG', 'Fine-tuning', 'Jupyter', '
 								</a>
 							</div>
 						</div>
-						<!-- Animated chat mockup -->
-						<div class="project-demo">
-							<div class="demo-chrome">
-								<span class="chrome-dot" style="background:#ff5f56"></span>
-								<span class="chrome-dot" style="background:#febc2e"></span>
-								<span class="chrome-dot" style="background:#28c840"></span>
-								<span class="chrome-url mono">mbgpt · comment assistant</span>
-							</div>
-							<div class="demo-screen mbgpt-screen">
-								<div class="mb-comment">
-									<div class="mb-avatar mb-avatar-user"></div>
-									<div class="mb-bubble mb-bubble-user">
-										This tutorial really helped me understand overfitting! 🔥
-									</div>
-								</div>
-								<div class="mb-stages">
-									<div class="mb-stage mb-stage-1">
-										<span class="mb-label mono">01 · Generic</span>
-										<p>Thank you for your kind comment!</p>
-									</div>
-									<div class="mb-stage mb-stage-2">
-										<span class="mb-label mono">02 · RAG</span>
-										<p>Glad the dropout explanation clicked for you!</p>
-									</div>
-									<div class="mb-stage mb-stage-3 mb-best">
-										<span class="mb-label mono">03 · Fine-tuned ✦</span>
-										<p>haha yeah overfitting got me too for the longest time 😅 stay tuned next week</p>
-									</div>
-								</div>
-							</div>
-						</div>
+						<MBGPTDemo />
 					</article>
 
 				</div>
@@ -729,89 +673,6 @@ const aimlBadges  = ['OpenAI API', 'Whisper', 'RAG', 'Fine-tuning', 'Jupyter', '
 }
 .demo-screen { padding: 16px; min-height: 220px; }
 
-/* ClassRec demo */
-.classrec-screen { display: flex; flex-direction: column; gap: 12px; }
-.cr-header { display: flex; justify-content: space-between; align-items: center; }
-.cr-title { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
-.cr-live {
-	display: inline-flex;
-	align-items: center;
-	gap: 5px;
-	font-family: var(--font-mono);
-	font-size: 10px;
-	letter-spacing: 1px;
-	color: #ef4444;
-	border: 1px solid rgba(239,68,68,0.3);
-	padding: 2px 8px;
-	border-radius: 4px;
-}
-.live-dot {
-	width: 5px; height: 5px;
-	border-radius: 50%;
-	background: #ef4444;
-	animation: pulse-dot 1s ease-in-out infinite;
-}
-@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
-.cr-lines { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.cr-line {
-	font-size: 12px;
-	color: var(--text-secondary);
-	line-height: 1.5;
-	padding: 6px 10px;
-	background: var(--surface2);
-	border-radius: 6px;
-	opacity: 0;
-	transform: translateY(6px);
-	transition: opacity 0.5s, transform 0.5s;
-}
-.project-row:hover .cr-line-1 { opacity: 1; transform: none; transition-delay: 0s; }
-.project-row:hover .cr-line-2 { opacity: 1; transform: none; transition-delay: 0.15s; }
-.project-row:hover .cr-line-3 { opacity: 1; transform: none; transition-delay: 0.3s; }
-.project-row:hover .cr-line-4 { opacity: 1; transform: none; transition-delay: 0.45s; }
-.cr-typing { color: var(--blue) !important; }
-.cursor { animation: blink 0.8s step-end infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-.cr-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
-.cr-waveform { display: flex; align-items: center; gap: 2px; height: 24px; }
-.wave-bar {
-	width: 3px;
-	height: 6px;
-	background: var(--blue);
-	border-radius: 2px;
-	opacity: 0.3;
-	transition: height 0.3s, opacity 0.3s;
-}
-.project-row:hover .wave-bar {
-	opacity: 0.7;
-	animation: wave-anim 0.8s ease-in-out infinite alternate;
-}
-@keyframes wave-anim {
-	from { height: 4px; }
-	to   { height: 20px; }
-}
-.cr-timer { font-size: 11px; color: var(--text-muted); }
-
-/* MBGPT demo */
-.mbgpt-screen { display: flex; flex-direction: column; gap: 10px; }
-.mb-comment { display: flex; align-items: flex-start; gap: 8px; }
-.mb-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--border-light); flex-shrink: 0; }
-.mb-bubble { font-size: 12px; color: var(--text-secondary); background: var(--surface2); border-radius: 8px; padding: 8px 12px; line-height: 1.5; }
-.mb-stages { display: flex; flex-direction: column; gap: 6px; }
-.mb-stage {
-	padding: 8px 12px;
-	border-radius: 8px;
-	border: 1px solid var(--border);
-	opacity: 0;
-	transform: translateX(-8px);
-	transition: opacity 0.4s, transform 0.4s;
-}
-.project-row:hover .mb-stage-1 { opacity:1; transform:none; transition-delay: 0.1s; }
-.project-row:hover .mb-stage-2 { opacity:1; transform:none; transition-delay: 0.3s; }
-.project-row:hover .mb-stage-3 { opacity:1; transform:none; transition-delay: 0.5s; }
-.mb-best { border-color: rgba(16,163,127,0.35); background: rgba(16,163,127,0.06); }
-.mb-label { font-size: 9px; letter-spacing: 1px; color: var(--text-muted); display: block; margin-bottom: 3px; }
-.mb-stage p { font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.4; }
-.mb-best p { color: var(--text); }
 
 /* ── Testimonials ──────────────────────────── */
 .testimonials-section { padding: 80px 0; border-top: 1px solid var(--border); }

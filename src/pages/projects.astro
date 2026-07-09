@@ -3,6 +3,8 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import FlowDiagram from '../components/FlowDiagram.astro';
+import ClassRecDemo from '../components/ClassRecDemo.astro';
+import MBGPTDemo from '../components/MBGPTDemo.astro';
 import { TECH_ICONS } from '../lib/techIcons';
 ---
 
@@ -176,16 +178,7 @@ import { TECH_ICONS } from '../lib/techIcons';
 						</div>
 					</div>
 					<div class="project-right">
-						<FlowDiagram
-							title="classrec · pipeline"
-							caption="real-time transcription"
-							nodes={[
-								{ label: 'Mic', icon: 'mic' },
-								{ label: 'VAD', icon: 'wave' },
-								{ label: 'Whisper', icon: 'chip', active: true },
-								{ label: 'Notes', icon: 'doc' },
-							]}
-						/>
+						<ClassRecDemo />
 						<div class="project-meta-box">
 							<div class="meta-row">
 								<span class="meta-label mono">Timeline</span>
@@ -239,16 +232,7 @@ import { TECH_ICONS } from '../lib/techIcons';
 						</div>
 					</div>
 					<div class="project-right">
-						<FlowDiagram
-							title="mbgpt · pipeline"
-							caption="RAG · fine-tuned"
-							nodes={[
-								{ label: 'Comment', icon: 'chat' },
-								{ label: 'Context', icon: 'doc' },
-								{ label: 'LLM', icon: 'brain', active: true },
-								{ label: 'Reply', icon: 'chat' },
-							]}
-						/>
+						<MBGPTDemo />
 						<div class="project-meta-box">
 							<div class="meta-row">
 								<span class="meta-label mono">Timeline</span>
