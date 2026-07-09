@@ -14,9 +14,30 @@
 	--font-serif:  'Instrument Serif', Georgia, serif;
 	--font-sans:   'Outfit', system-ui, sans-serif;
 	--font-mono:   'IBM Plex Mono', 'Courier New', monospace;
+	--header-bg:   rgba(0, 0, 0, 0.7);
 	/* Diagonal stripe pattern used as decorative borders */
 	--stripe-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2' stroke='%23262626' stroke-width='0.8'/%3E%3C/svg%3E");
 }
+
+/* Light theme — overrides the palette; every surface/text uses these vars */
+html[data-theme="light"] {
+	--bg:          #ffffff;
+	--surface:     #f7f7f8;
+	--surface2:    #ececee;
+	--border:      #e4e4e7;
+	--border-light: #d4d4d8;
+	--text:        #18181b;
+	--text-secondary: #52525b;
+	--text-muted:  #71717a;
+	--blue:        #2563eb;
+	--blue-dim:    rgba(37,99,235,0.10);
+	--cyan:        #0e7490;
+	--indigo:      #4f46e5;
+	--header-bg:   rgba(255, 255, 255, 0.78);
+	--stripe-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2' stroke='%23d4d4d8' stroke-width='0.8'/%3E%3C/svg%3E");
+}
+/* Soften the dark grain overlay on light backgrounds */
+html[data-theme="light"] body::before { opacity: 0.35; mix-blend-mode: multiply; }
 
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,6 +52,7 @@ body {
 	overflow-x: hidden;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Subtle noise overlay */
@@ -89,6 +111,14 @@ a {
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	background-clip: text;
+}
+/* In light mode the light-gray gradient/serif titles would be invisible —
+   render them as solid readable text instead. */
+html[data-theme="light"] .gradient-text,
+html[data-theme="light"] .serif {
+	background: none !important;
+	-webkit-text-fill-color: var(--text) !important;
+	color: var(--text) !important;
 }
 
 /* ── Stripe border decoration ────────────────── */

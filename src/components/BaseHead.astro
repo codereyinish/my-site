@@ -22,6 +22,13 @@ const ogImage = typeof image === 'string'
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
+<script is:inline>
+	// Apply saved theme before paint to avoid a flash of the wrong theme
+	try {
+		var t = localStorage.getItem('theme');
+		if (t) document.documentElement.dataset.theme = t;
+	} catch (e) {}
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" href="/favicon.ico" />
