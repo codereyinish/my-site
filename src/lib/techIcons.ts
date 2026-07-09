@@ -48,4 +48,16 @@ export const TECH_ICONS: Record<string, string> = {
 		`<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#22C55E"/><path d="M7 10l-3 2 3 2M17 10l3 2-3 2" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="4" y1="12" x2="20" y2="12" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>`,
 	'Vector DB':
 		`<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="7" rx="7" ry="2.2" fill="#6366f1"/><path d="M5 7v4c0 1.2 3.1 2.2 7 2.2S19 12.2 19 11V7" fill="#4f46e5"/><ellipse cx="12" cy="11" rx="7" ry="2.2" fill="#4f46e5"/><path d="M5 11v5c0 1.2 3.1 2.2 7 2.2S19 17.2 19 16v-5" fill="#3730a3"/><ellipse cx="12" cy="16" rx="7" ry="2.2" fill="#3730a3"/></svg>`,
+	Go:
+		`<svg width="18" height="18" viewBox="0 0 24 24"><rect x="1" y="5" width="22" height="14" rx="3" fill="#00ADD8"/><text x="12" y="16" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">Go</text></svg>`,
+	WireGuard:
+		`<svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" fill="#88171A"/><path d="M8 12l3 3 5-5" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+	Networking:
+		`<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7 6h10M6.5 7.5L11 16M17.5 7.5L13 16" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round"/><circle cx="5" cy="6" r="2.2" fill="#38bdf8"/><circle cx="19" cy="6" r="2.2" fill="#38bdf8"/><circle cx="12" cy="18" r="2.2" fill="#38bdf8"/></svg>`,
+	Swift:
+		`<svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#F05138"/><path d="M7 6c4 2.5 7 5 8.6 8 .5-2 .1-4-1-5.6 2.1 2 3.1 4.6 2.5 7.2-3 2-7 1.4-10-1.1 1.6.3 3.2.2 4.5-.5C10.2 13.9 8.1 11.1 7 6z" fill="white"/></svg>`,
+	TLS:
+		`<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2" fill="#16a34a"/><path d="M8 10V7a4 4 0 018 0v3" stroke="#16a34a" stroke-width="2" fill="none"/><circle cx="12" cy="15" r="1.5" fill="white"/></svg>`,
+	Terraform:
+		`<svg width="18" height="18" viewBox="0 0 24 24" fill="#7B42BC"><path d="M9.5 4v4.6l4 2.3V6.3L9.5 4z"/><path d="M14 6.6v4.6l4 2.3V8.9L14 6.6z"/><path d="M9.5 9.4V14l4 2.3v-4.6L9.5 9.4z"/></svg>`,
 };

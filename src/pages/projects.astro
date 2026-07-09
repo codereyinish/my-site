@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import FlowDiagram from '../components/FlowDiagram.astro';
 import { TECH_ICONS } from '../lib/techIcons';
 ---
 
@@ -22,11 +23,134 @@ import { TECH_ICONS } from '../lib/techIcons';
 
 				<div class="section-divider"></div>
 
-				<!-- 01 ClassRec -->
-				<article class="project-row animate-fadeInUp delay-1" id="classrec">
+				<!-- 01 ColdVPN -->
+				<article class="project-row animate-fadeInUp delay-1" id="coldvpn">
 					<div class="project-left">
 						<div class="project-num-row">
 							<span class="project-num mono">01</span>
+							<span class="badge badge-blue">Open Source</span>
+						</div>
+						<h2 class="project-title">ColdVPN</h2>
+						<p class="project-desc">
+							A one-click VPN that routes all of your Mac's traffic through a private
+							server you own — so on public / coffee-shop wifi, the network only ever sees
+							an encrypted tunnel, never where you're going. Zero manual setup: one command
+							spins the whole thing up.
+						</p>
+						<p class="project-desc">
+							Under the hood, a virtual network interface captures traffic at the packet
+							level, wraps it in a double-layered WireGuard path, and forwards it to your
+							own exit server — every app protected, always on.
+						</p>
+						<div class="project-tech-row">
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['WireGuard']}/>WireGuard</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['Go']}/>Go</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['Networking']}/>Networking</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['Swift']}/>Swift</span>
+						</div>
+						<div class="project-links">
+							<a href="https://github.com/codereyinish/ColdVPN" target="_blank" rel="noopener" class="project-link">
+								View on GitHub
+								<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+							</a>
+						</div>
+					</div>
+					<div class="project-right">
+						<FlowDiagram
+							title="coldvpn · tunnel"
+							caption="encrypted · WireGuard tunnel"
+							nodes={[
+								{ label: 'Mac', icon: 'laptop' },
+								{ label: 'WireGuard', icon: 'shield' },
+								{ label: 'Your Server', icon: 'server', active: true },
+								{ label: 'Internet', icon: 'globe' },
+							]}
+						/>
+						<div class="project-meta-box">
+							<div class="meta-row">
+								<span class="meta-label mono">Timeline</span>
+								<span class="meta-val">Q2 2026</span>
+							</div>
+							<div class="meta-row">
+								<span class="meta-label mono">Type</span>
+								<span class="meta-val">Systems · Networking</span>
+							</div>
+							<div class="meta-row">
+								<span class="meta-label mono">Status</span>
+								<span class="meta-val" style="color:var(--cyan)">Open source</span>
+							</div>
+						</div>
+					</div>
+				</article>
+
+				<div class="section-divider"></div>
+
+				<!-- 02 ColdSpot -->
+				<article class="project-row animate-fadeInUp delay-2" id="coldspot">
+					<div class="project-left">
+						<div class="project-num-row">
+							<span class="project-num mono">02</span>
+							<span class="badge">Private</span>
+						</div>
+						<h2 class="project-title">ColdSpot</h2>
+						<p class="project-desc">
+							ColdVPN with zero servers to rent: your phone becomes the relay and a free
+							cloud VM becomes your private exit — one-click setup, nothing manual, and
+							infrastructure you fully control end to end.
+						</p>
+						<p class="project-desc">
+							A deep networking build — Layer-3 packet capture, a userspace TCP/IP stack, a
+							reverse tunnel for NAT traversal, SOCKS5-over-TLS with certificate pinning, and
+							self-healing services. Kept private and shared with developers on request.
+						</p>
+						<div class="project-tech-row">
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['Go']}/>Go</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['Networking']}/>Networking</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['TLS']}/>TLS</span>
+							<span class="tech-tag"><Fragment set:html={TECH_ICONS['Terraform']}/>Terraform</span>
+						</div>
+						<div class="project-links">
+							<a href="https://github.com/codereyinish/coldspot-access" target="_blank" rel="noopener" class="project-link">
+								Request access
+								<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+							</a>
+						</div>
+					</div>
+					<div class="project-right">
+						<FlowDiagram
+							title="coldspot · relay topology"
+							caption="encrypted · SOCKS5-over-TLS"
+							nodes={[
+								{ label: 'Mac', icon: 'laptop' },
+								{ label: 'iPhone', icon: 'phone' },
+								{ label: 'Oracle VM', icon: 'cloud', active: true },
+								{ label: 'Internet', icon: 'globe' },
+							]}
+						/>
+						<div class="project-meta-box">
+							<div class="meta-row">
+								<span class="meta-label mono">Timeline</span>
+								<span class="meta-val">Q3 2026</span>
+							</div>
+							<div class="meta-row">
+								<span class="meta-label mono">Type</span>
+								<span class="meta-val">Systems · Networking</span>
+							</div>
+							<div class="meta-row">
+								<span class="meta-label mono">Status</span>
+								<span class="meta-val" style="color:var(--text-muted)">Private · request access</span>
+							</div>
+						</div>
+					</div>
+				</article>
+
+				<div class="section-divider"></div>
+
+				<!-- 03 ClassRec -->
+				<article class="project-row animate-fadeInUp delay-3" id="classrec">
+					<div class="project-left">
+						<div class="project-num-row">
+							<span class="project-num mono">03</span>
 							<span class="badge">Active</span>
 						</div>
 						<h2 class="project-title">ClassRec</h2>
@@ -52,9 +176,16 @@ import { TECH_ICONS } from '../lib/techIcons';
 						</div>
 					</div>
 					<div class="project-right">
-						<div class="project-cover">
-							<img src="https://picsum.photos/seed/classrec-project-v2/700/500" alt="ClassRec" loading="lazy" />
-						</div>
+						<FlowDiagram
+							title="classrec · pipeline"
+							caption="real-time transcription"
+							nodes={[
+								{ label: 'Mic', icon: 'mic' },
+								{ label: 'VAD', icon: 'wave' },
+								{ label: 'Whisper', icon: 'chip', active: true },
+								{ label: 'Notes', icon: 'doc' },
+							]}
+						/>
 						<div class="project-meta-box">
 							<div class="meta-row">
 								<span class="meta-label mono">Timeline</span>
@@ -74,11 +205,11 @@ import { TECH_ICONS } from '../lib/techIcons';
 
 				<div class="section-divider"></div>
 
-				<!-- 02 MBGPT -->
-				<article class="project-row animate-fadeInUp delay-2" id="mbgpt">
+				<!-- 04 MBGPT -->
+				<article class="project-row animate-fadeInUp delay-4" id="mbgpt">
 					<div class="project-left">
 						<div class="project-num-row">
-							<span class="project-num mono">02</span>
+							<span class="project-num mono">04</span>
 							<span class="badge">Shipped</span>
 						</div>
 						<h2 class="project-title">MBGPT</h2>
@@ -108,9 +239,16 @@ import { TECH_ICONS } from '../lib/techIcons';
 						</div>
 					</div>
 					<div class="project-right">
-						<div class="project-cover">
-							<img src="https://picsum.photos/seed/mbgpt-project-v2/700/500" alt="MBGPT" loading="lazy" />
-						</div>
+						<FlowDiagram
+							title="mbgpt · pipeline"
+							caption="RAG · fine-tuned"
+							nodes={[
+								{ label: 'Comment', icon: 'chat' },
+								{ label: 'Context', icon: 'doc' },
+								{ label: 'LLM', icon: 'brain', active: true },
+								{ label: 'Reply', icon: 'chat' },
+							]}
+						/>
 						<div class="project-meta-box">
 							<div class="meta-row">
 								<span class="meta-label mono">Timeline</span>
@@ -191,6 +329,30 @@ import { TECH_ICONS } from '../lib/techIcons';
 	}
 	.project-cover img { width: 100%; display: block; transition: transform 0.4s ease; }
 	.project-row:hover .project-cover img { transform: scale(1.02); }
+
+	/* Animated project mockups (shared look with homepage) */
+	.project-demo {
+		border: 1px solid var(--border);
+		border-radius: 14px;
+		overflow: hidden;
+		background: var(--surface);
+		transition: border-color 0.3s, box-shadow 0.3s;
+	}
+	.project-row:hover .project-demo {
+		border-color: var(--border-light);
+		box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+	}
+	.demo-chrome {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 10px 14px;
+		border-bottom: 1px solid var(--border);
+		background: var(--surface2);
+	}
+	.chrome-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+	.chrome-url { font-size: 11px; color: var(--text-muted); margin-left: 6px; letter-spacing: 0.3px; }
+
 	.project-meta-box {
 		border: 1px solid var(--border);
 		border-radius: 12px;

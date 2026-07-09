@@ -4,8 +4,10 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import FlowDiagram from '../components/FlowDiagram.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { TECH_ICONS } from '../lib/techIcons';
+import { POST_FLOWS } from '../lib/postFlows';
 
 const posts = (await getCollection('blog'))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -143,9 +145,91 @@ const aimlBadges  = ['OpenAI API', 'Whisper', 'RAG', 'Fine-tuning', 'Jupyter', '
 
 				<div class="projects-list">
 
-					<!-- 01 ClassRec -->
+					<!-- 01 ColdVPN -->
 					<article class="project-row">
 						<div class="project-num mono">01</div>
+						<div class="project-content">
+							<div class="project-meta">
+								<span class="project-year mono">Q2 2026</span>
+								<span class="badge badge-blue">Open Source</span>
+							</div>
+							<h3 class="project-title">ColdVPN</h3>
+							<p class="project-desc">
+								A one-click VPN that routes all of your Mac's traffic through a private server
+								you own — safe on public wifi, with zero manual setup and no VPN company in
+								the middle.
+							</p>
+							<div class="project-tech-row">
+								<span class="tech-tag" style="--tc:#88171a"><Fragment set:html={TECH_ICONS['WireGuard']} />WireGuard</span>
+								<span class="tech-tag" style="--tc:#00add8"><Fragment set:html={TECH_ICONS['Go']} />Go</span>
+								<span class="tech-tag" style="--tc:#38bdf8"><Fragment set:html={TECH_ICONS['Networking']} />Networking</span>
+								<span class="tech-tag" style="--tc:#f05138"><Fragment set:html={TECH_ICONS['Swift']} />Swift</span>
+							</div>
+							<div class="project-links">
+								<a href="https://github.com/codereyinish/ColdVPN" target="_blank" rel="noopener" class="project-link">
+									GitHub <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+								</a>
+							</div>
+						</div>
+						<!-- Tunnel flow mockup -->
+						<FlowDiagram
+							title="coldvpn · tunnel"
+							caption="encrypted · WireGuard tunnel"
+							nodes={[
+								{ label: 'Mac', icon: 'laptop' },
+								{ label: 'WireGuard', icon: 'shield' },
+								{ label: 'Your Server', icon: 'server', active: true },
+								{ label: 'Internet', icon: 'globe' },
+							]}
+						/>
+					</article>
+
+					<div class="section-divider"></div>
+
+					<!-- 02 ColdSpot -->
+					<article class="project-row">
+						<div class="project-num mono">02</div>
+						<div class="project-content">
+							<div class="project-meta">
+								<span class="project-year mono">Q3 2026</span>
+								<span class="badge">Private</span>
+							</div>
+							<h3 class="project-title">ColdSpot</h3>
+							<p class="project-desc">
+								ColdVPN with zero servers to rent: your phone relays traffic to a private exit
+								on a free cloud VM — one-click setup. Under it: L3 capture, a userspace TCP/IP
+								stack, NAT traversal, and SOCKS5-over-TLS.
+							</p>
+							<div class="project-tech-row">
+								<span class="tech-tag" style="--tc:#00add8"><Fragment set:html={TECH_ICONS['Go']} />Go</span>
+								<span class="tech-tag" style="--tc:#38bdf8"><Fragment set:html={TECH_ICONS['Networking']} />Networking</span>
+								<span class="tech-tag" style="--tc:#16a34a"><Fragment set:html={TECH_ICONS['TLS']} />TLS</span>
+								<span class="tech-tag" style="--tc:#7b42bc"><Fragment set:html={TECH_ICONS['Terraform']} />Terraform</span>
+							</div>
+							<div class="project-links">
+								<a href="https://github.com/codereyinish/coldspot-access" target="_blank" rel="noopener" class="project-link">
+									Request access <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+								</a>
+							</div>
+						</div>
+						<!-- Relay topology mockup -->
+						<FlowDiagram
+							title="coldspot · relay topology"
+							caption="encrypted · SOCKS5-over-TLS"
+							nodes={[
+								{ label: 'Mac', icon: 'laptop' },
+								{ label: 'iPhone', icon: 'phone' },
+								{ label: 'Oracle VM', icon: 'cloud', active: true },
+								{ label: 'Internet', icon: 'globe' },
+							]}
+						/>
+					</article>
+
+					<div class="section-divider"></div>
+
+					<!-- 03 ClassRec -->
+					<article class="project-row">
+						<div class="project-num mono">03</div>
 						<div class="project-content">
 							<div class="project-meta">
 								<span class="project-year mono">Q4 2024</span>
@@ -198,9 +282,9 @@ const aimlBadges  = ['OpenAI API', 'Whisper', 'RAG', 'Fine-tuning', 'Jupyter', '
 
 					<div class="section-divider"></div>
 
-					<!-- 02 MBGPT -->
+					<!-- 04 MBGPT -->
 					<article class="project-row">
-						<div class="project-num mono">02</div>
+						<div class="project-num mono">04</div>
 						<div class="project-content">
 							<div class="project-meta">
 								<span class="project-year mono">Q3 2024</span>
@@ -363,7 +447,11 @@ const aimlBadges  = ['OpenAI API', 'Whisper', 'RAG', 'Fine-tuning', 'Jupyter', '
 							return (
 								<a href={`/blog/${post.id}/`} class="blog-card" style={`--accent:${accent}`}>
 									<div class="blog-card-img-wrap">
-										<div class="blog-card-img" style={(() => { const img = post.data.thumbnail ?? post.data.heroImage; return img ? `background-image:url('${img}')` : ''; })()}></div>
+										{POST_FLOWS[post.id] ? (
+												<FlowDiagram compact title={POST_FLOWS[post.id].title} caption={POST_FLOWS[post.id].caption} nodes={POST_FLOWS[post.id].nodes} />
+											) : (
+												<div class="blog-card-img" style={(() => { const img = post.data.thumbnail ?? post.data.heroImage; return img ? `background-image:url('${img}')` : ''; })()}></div>
+											)}
 										<div class="blog-card-sketch"></div>
 										<div class="blog-card-accent"></div>
 									</div>
