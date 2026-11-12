@@ -17,7 +17,7 @@ import { TECH_ICONS } from '../lib/techIcons';
 				<div class="page-header animate-fadeInDown">
 					<p class="eyebrow mono">CV</p>
 					<h1>Résumé</h1>
-					<p class="page-sub">CS student, graduating May 2026. Open to full-time roles.</p>
+					<p class="page-sub">AI engineer building production speech and ML systems — real-time transcription, serverless GPU inference, and the cloud infrastructure they run on.</p>
 					<div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
 						<a href="/manish_bista_resume.pdf" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-flex">
 							View Resume
@@ -41,13 +41,40 @@ import { TECH_ICONS } from '../lib/techIcons';
 								<div class="resume-item">
 									<div class="item-header">
 										<div>
-											<h3 class="item-role">Software Engineering Intern</h3>
-											<p class="item-org">Add your experience here</p>
+											<h3 class="item-role">Founder</h3>
+											<p class="item-org">ClassRec · classrec.com</p>
 										</div>
-										<span class="item-date mono">2024</span>
+										<span class="item-date mono">Jan 2026 – Present</span>
 									</div>
 									<ul class="item-bullets">
-										<li>Details about your role and impact</li>
+										<li>Built and deployed a full-stack web app enabling students to upload or live-record lectures and receive AI-generated transcripts</li>
+										<li>Eliminated ~30% of hallucinated transcript segments by integrating Silero VAD via ONNX Runtime for silence detection before passing audio to Whisper</li>
+										<li>Deployed faster-whisper large-v3 on Modal serverless GPU (T4), cutting per-lecture inference cost ~65% vs OpenAI Whisper API while improving accuracy on accented speech</li>
+									</ul>
+								</div>
+								<div class="resume-item">
+									<div class="item-header">
+										<div>
+											<h3 class="item-role">AI Engineer</h3>
+											<p class="item-org">TalentSathi (Freelance) · Kathmandu, Nepal · Remote</p>
+										</div>
+										<span class="item-date mono">Feb 2024 – Present</span>
+									</div>
+									<ul class="item-bullets">
+										<li>Built a classifier that flags bot and fraudulent applications before they reach human reviewers, filtering spam out of the recruiter queue</li>
+										<li>Automated first-pass candidate screening, cutting review time from 1 hour to 10 minutes per 100 applications</li>
+									</ul>
+								</div>
+								<div class="resume-item">
+									<div class="item-header">
+										<div>
+											<h3 class="item-role">Technical Solutions Engineer</h3>
+											<p class="item-org">NestNepal</p>
+										</div>
+										<span class="item-date mono">2026 – Present</span>
+									</div>
+									<ul class="item-bullets">
+										<li>Scoped and sized cloud infrastructure for customer workloads, translating traffic, storage and uptime requirements into concrete server, storage and network configurations</li>
 									</ul>
 								</div>
 							</div>
@@ -59,10 +86,10 @@ import { TECH_ICONS } from '../lib/techIcons';
 								<div class="resume-item">
 									<div class="item-header">
 										<div>
-											<h3 class="item-role">B.S. Computer Science</h3>
-											<p class="item-org">St. Joseph's College New York</p>
+											<h3 class="item-role">B.S. Mathematics / Computer Science</h3>
+											<p class="item-org">St. Joseph's University, New York — Brooklyn · Minor in Data Science · GPA 3.6 / 4.0</p>
 										</div>
-										<span class="item-date mono">2021 – 2026</span>
+										<span class="item-date mono">May 2026</span>
 									</div>
 								</div>
 							</div>
@@ -80,35 +107,34 @@ import { TECH_ICONS } from '../lib/techIcons';
 										<span class="item-date mono">2026</span>
 									</div>
 									<ul class="item-bullets">
-										<li>Built a one-click VPN that routes all of a Mac's traffic through a private server you own — safe on public and coffee-shop wifi, with no third-party VPN company in the middle</li>
-										<li>Automated the full setup so a single command creates and configures the user's own server; every app is protected automatically with zero manual configuration</li>
-										<li>Extended it (ColdSpot) to remove the need to rent a server at all — the user's phone acts as the relay and a free cloud server becomes the private exit</li>
+										<li>Zero-config VPN: one download sets up a private server and starts encrypting all device traffic automatically</li>
+										<li>Captures traffic at the network layer, so even apps that bypass proxy settings are tunneled; ColdSpot relays it through a paired iPhone to a self-hosted exit server</li>
 									</ul>
 								</div>
 								<div class="resume-item">
 									<div class="item-header">
 										<div>
-											<h3 class="item-role">ClassRec</h3>
-											<p class="item-org">Live lecture transcription SaaS</p>
+											<h3 class="item-role">CloudBot</h3>
+											<p class="item-org">AI food ordering chatbot</p>
 										</div>
-										<span class="item-date mono">2024</span>
 									</div>
 									<ul class="item-bullets">
-										<li>Built real-time transcription pipeline with OpenAI Whisper and WebSockets</li>
-										<li>FastAPI backend, React frontend, PostgreSQL for session storage</li>
+										<li>AI chatbot that takes food orders in natural language and processes them in real time</li>
+										<li>NLP intent recognition with Dialogflow ES; FastAPI webhook persists orders to Cloud SQL</li>
 									</ul>
 								</div>
 								<div class="resume-item">
 									<div class="item-header">
 										<div>
 											<h3 class="item-role">MBGPT</h3>
-											<p class="item-org">AI YouTube comment assistant</p>
+											<p class="item-org">Fine-tuned LLM for YouTube comment replies</p>
 										</div>
 										<span class="item-date mono">2024</span>
 									</div>
 									<ul class="item-bullets">
-										<li>RAG pipeline with OpenAI API for context-aware comment replies</li>
-										<li>Fine-tuned GPT model on historical comment–reply pairs</li>
+										<li>Fine-tuned LLM that generates context-aware replies to YouTube comments</li>
+										<li>Quantized Mistral-7B with QLoRA, cutting model size ~75% and enabling CPU inference on a 16GB MacBook</li>
+										<li>Parameter-efficient fine-tuning (QLoRA/PEFT) on a custom YouTube comment dataset</li>
 									</ul>
 								</div>
 							</div>
@@ -120,27 +146,45 @@ import { TECH_ICONS } from '../lib/techIcons';
 						<div class="sidebar-card">
 							<h3 class="card-title mono">Skills</h3>
 							<div class="skills-group">
-								<p class="skill-label">Languages</p>
-								<div class="skill-tags">
-									<span><Fragment set:html={TECH_ICONS['Python']}/>Python</span><span><Fragment set:html={TECH_ICONS['TypeScript']}/>TypeScript</span><span><Fragment set:html={TECH_ICONS['SQL']}/>SQL</span><span><Fragment set:html={TECH_ICONS['JavaScript']}/>JavaScript</span>
-								</div>
-							</div>
-							<div class="skills-group">
-								<p class="skill-label">Frameworks</p>
-								<div class="skill-tags">
-									<span><Fragment set:html={TECH_ICONS['FastAPI']}/>FastAPI</span><span><Fragment set:html={TECH_ICONS['React']}/>React</span><span><Fragment set:html={TECH_ICONS['Next.js']}/>Next.js</span>
-								</div>
-							</div>
-							<div class="skills-group">
 								<p class="skill-label">AI / ML</p>
 								<div class="skill-tags">
-									<span><Fragment set:html={TECH_ICONS['OpenAI API']}/>OpenAI API</span><span><Fragment set:html={TECH_ICONS['Whisper']}/>Whisper</span><span><Fragment set:html={TECH_ICONS['RAG']}/>RAG</span><span><Fragment set:html={TECH_ICONS['Fine-tuning']}/>Fine-tuning</span>
+									<span><Fragment set:html={TECH_ICONS['PyTorch'] ?? ''}/>PyTorch</span><span><Fragment set:html={TECH_ICONS['HuggingFace'] ?? ''}/>HuggingFace</span><span><Fragment set:html={TECH_ICONS['Transformers'] ?? ''}/>Transformers</span><span><Fragment set:html={TECH_ICONS['LangChain'] ?? ''}/>LangChain</span><span><Fragment set:html={TECH_ICONS['faster-whisper'] ?? ''}/>faster-whisper</span><span><Fragment set:html={TECH_ICONS['Streamlit'] ?? ''}/>Streamlit</span>
+								</div>
+							</div>
+							<div class="skills-group">
+								<p class="skill-label">Backend &amp; Cloud</p>
+								<div class="skill-tags">
+									<span><Fragment set:html={TECH_ICONS['FastAPI'] ?? ''}/>FastAPI</span><span><Fragment set:html={TECH_ICONS['Node.js'] ?? ''}/>Node.js</span><span><Fragment set:html={TECH_ICONS['Docker'] ?? ''}/>Docker</span><span><Fragment set:html={TECH_ICONS['Modal'] ?? ''}/>Modal</span><span><Fragment set:html={TECH_ICONS['GCP'] ?? ''}/>GCP</span><span><Fragment set:html={TECH_ICONS['DigitalOcean'] ?? ''}/>DigitalOcean</span>
+								</div>
+							</div>
+							<div class="skills-group">
+								<p class="skill-label">Languages</p>
+								<div class="skill-tags">
+									<span><Fragment set:html={TECH_ICONS['Python'] ?? ''}/>Python</span><span><Fragment set:html={TECH_ICONS['JavaScript'] ?? ''}/>JavaScript</span><span><Fragment set:html={TECH_ICONS['Java'] ?? ''}/>Java</span><span><Fragment set:html={TECH_ICONS['Go'] ?? ''}/>Go</span><span><Fragment set:html={TECH_ICONS['C'] ?? ''}/>C</span><span><Fragment set:html={TECH_ICONS['R'] ?? ''}/>R</span><span><Fragment set:html={TECH_ICONS['SQL'] ?? ''}/>SQL</span>
+								</div>
+							</div>
+							<div class="skills-group">
+								<p class="skill-label">Networking</p>
+								<div class="skill-tags">
+									<span><Fragment set:html={TECH_ICONS['WireGuard'] ?? ''}/>WireGuard</span><span><Fragment set:html={TECH_ICONS['TCP/IP'] ?? ''}/>TCP/IP</span><span><Fragment set:html={TECH_ICONS['SOCKS5'] ?? ''}/>SOCKS5</span><span><Fragment set:html={TECH_ICONS['TLS'] ?? ''}/>TLS</span><span><Fragment set:html={TECH_ICONS['Terraform'] ?? ''}/>Terraform</span>
+								</div>
+							</div>
+							<div class="skills-group">
+								<p class="skill-label">Data Science</p>
+								<div class="skill-tags">
+									<span><Fragment set:html={TECH_ICONS['Pandas'] ?? ''}/>Pandas</span><span><Fragment set:html={TECH_ICONS['NumPy'] ?? ''}/>NumPy</span><span><Fragment set:html={TECH_ICONS['Jupyter'] ?? ''}/>Jupyter</span><span><Fragment set:html={TECH_ICONS['Conda'] ?? ''}/>Conda</span>
 								</div>
 							</div>
 							<div class="skills-group">
 								<p class="skill-label">Tools</p>
 								<div class="skill-tags">
-									<span><Fragment set:html={TECH_ICONS['Git']}/>Git</span><span><Fragment set:html={TECH_ICONS['Docker']}/>Docker</span><span><Fragment set:html={TECH_ICONS['Vercel']}/>Vercel</span><span><Fragment set:html={TECH_ICONS['PostgreSQL']}/>PostgreSQL</span>
+									<span><Fragment set:html={TECH_ICONS['Git'] ?? ''}/>Git</span><span><Fragment set:html={TECH_ICONS['GitHub Actions'] ?? ''}/>GitHub Actions</span><span><Fragment set:html={TECH_ICONS['Linux'] ?? ''}/>Linux</span><span><Fragment set:html={TECH_ICONS['Sentry'] ?? ''}/>Sentry</span><span><Fragment set:html={TECH_ICONS['Clerk'] ?? ''}/>Clerk</span>
+								</div>
+							</div>
+							<div class="skills-group">
+								<p class="skill-label">Frontend</p>
+								<div class="skill-tags">
+									<span><Fragment set:html={TECH_ICONS['React'] ?? ''}/>React</span><span><Fragment set:html={TECH_ICONS['Astro'] ?? ''}/>Astro</span><span><Fragment set:html={TECH_ICONS['Vanilla JS'] ?? ''}/>Vanilla JS</span><span><Fragment set:html={TECH_ICONS['Jinja2'] ?? ''}/>Jinja2</span>
 								</div>
 							</div>
 						</div>
